@@ -1,0 +1,23 @@
+{
+    "name": "tp1/trabalho",
+    "description": "Trabalho pratico",
+    "type": "project",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Agenda\\":"./"
+        }
+    },
+    "authors": [
+        {
+            "name": "Caique"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "slim/slim": "4.*",
+        "slim/psr7": "^1.5",
+        "slim/http": "^1.2"
+
+    }
+}
