@@ -12,6 +12,7 @@ class HomeView
     public function render()
     {
         $title = 'Home';
+        $content = '';
         require_once './Views/templates/main.phtml';
 
     }

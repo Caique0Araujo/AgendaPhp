@@ -19,11 +19,15 @@ require_once './vendor/autoload.php';
 $app = AppFactory::create();
 
 
+// MAIN ROUTES
+
 $app->any('/agendaPhp/home', function (Request $request, Response $response,) {
     $controller = new HomeView();
     $controller->render();
     return $response;
 });
+
+// CONTACT ROUTES
 
 
 $app->any('/agendaPhp/contacts', function (Request $request, Response $response,) {
@@ -32,16 +36,57 @@ $app->any('/agendaPhp/contacts', function (Request $request, Response $response,
     return $response;
 });
 
+$app->any('/agendaPhp/addContact', function (Request $request, Response $response,) {
+    $controller = new ControllerContact();
+    $controller->store();
+    return $response;
+});
+
+$app->any('/agendaPhp/editContact', function (Request $request, Response $response,) {
+    $controller = new ControllerContact();
+    $controller->update();
+    return $response;
+});
+
+// EVENTS ROUTES
+
 $app->any('/agendaPhp/events', function (Request $request, Response $response,) {
     $controller = new ControllerEvent();
     $controller->indexAll();
     return $response;
 });
 
+$app->any('/agendaPhp/addEvent', function (Request $request, Response $response,) {
+    $controller = new ControllerEvent();
+    $controller->store();
+    return $response;
+});
+
+$app->any('/agendaPhp/editEvent', function (Request $request, Response $response,) {
+    $controller = new ControllerEvent();
+    $controller->update();
+    return $response;
+});
+
+// GROUPS ROUTES
+
 $app->any('/agendaPhp/groups', function (Request $request, Response $response,) {
     $controller = new ControllerGroup();
     $controller->indexAll();
     return $response;
 });
+
+$app->any('/agendaPhp/addGroups', function (Request $request, Response $response,) {
+    $controller = new ControllerGroup();
+    $controller->store();
+    return $response;
+});
+
+$app->any('/agendaPhp/editGroups', function (Request $request, Response $response,) {
+    $controller = new ControllerGroup();
+    $controller->update();
+    return $response;
+});
+
 
 $app->run();

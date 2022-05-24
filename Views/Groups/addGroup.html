@@ -1,37 +1,17 @@
 <div class="container">
-  <h1 class="container-title">Editar contatos</h1>
-  <form action="/contacts/editcontact" method="post" class="form-add">
-    <input type="hidden" name="id" id="id" value="" />
+  <h1 class="container-title">Adicionar grupos</h1>
+  <form action="/groups/addgroup" method="post" class="form-add">
     <div class="container-fields">
-      <label for="nome">Nome*: </label>
+      <label for="name">Nome*: </label>
+      <input class="textfields" type="text" id="name" name="name" required />
+    </div>
+    <div class="container-fields">
+      <label for="description">Descrição: </label>
       <input
         class="textfields"
         type="text"
-        id="name"
-        name="name"
-        required
-        value="{{contact.name}}"
-      />
-    </div>
-    <div class="container-fields">
-      <label for="fone">Telefone*: </label>
-      <input
-        class="textfields"
-        type="number"
-        id="fone"
-        name="fone"
-        required
-        value="{{contact.fone}}"
-      />
-    </div>
-    <div class="container-fields">
-      <label for="email">E-mail: </label>
-      <input
-        class="textfields"
-        type="email"
-        id="email"
-        name="email"
-        value="{{contact.email}}"
+        id="description"
+        name="description"
       />
     </div>
     <div class="container-bttns">
@@ -39,7 +19,6 @@
     </div>
   </form>
 </div>
-
 <style>
   .container {
     padding: 10px;

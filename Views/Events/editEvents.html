@@ -1,0 +1,121 @@
+<div class="container">
+    <h1 class="container-title">Editar eventos</h1>
+    <form action="/events/editevent" method="post" class="form-add">
+        <input type="hidden" name="id" id="id" value="{{event.id}}">
+        <div class="container-fields">
+            <label for="name">Nome*: </label>
+            <input class="textfields" type="text" id="name" name="name" required value="{{event.name}}">
+        </div>
+        <div class="container-fields">
+            <label for="description">Descrição: </label>
+            <input class="textfields" type="text" id="description" name="description" value="{{event.description}}">
+        </div>
+        <div class="container-fields">
+            <label for="date">Data: </label>
+            <input class="textfields" type="datetime-local" id="date" name="date" value="{{event.eventDate}}">
+        </div>
+        <div class="container-bttns">
+            <input class="bttn-submit" type="submit" value="Confirmar">
+        </div>
+    </form>
+<style>
+    .container {
+      padding: 10px;
+      margin-top: 5em;
+      min-width: 400px;
+      min-height: 300px;
+      max-width: fit-content;
+      box-shadow: 0px 3px 10px 0px rgba(0, 0, 0, 0.23);
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background-color: rgb(255, 255, 255);
+    }
+    .contacts,
+    .container #bttn-contact {
+      display: flex;
+      align-items: center;
+      margin: auto;
+      min-width: 10em;
+      justify-content: center;
+    }
+    .container {
+      background-color: rgba(237, 237, 237, 0.4);
+      backdrop-filter: blur(7px);
+    }
+  
+    .container .container-title {
+      margin-top: 0x;
+      margin-bottom: 15px;
+      color: #091420;
+    }
+  
+    .container form {
+      padding: 1em;
+      margin: 1em;
+    }
+  
+    form .container-fields {
+      margin-bottom: 15px;
+      align-items: center;
+    }
+  
+    .container-bttns {
+      padding: 0.5em;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-around;
+      align-items: center;
+    }
+  
+    .container-bttns .bttn-submit,
+    #delete-user {
+      margin-top: 1em;
+      width: 40%;
+    }
+  
+    .container-fields .textfields {
+      width: 100%;
+    }
+  
+    input {
+      border: 0;
+    }
+  
+    .textfields {
+      background-color: transparent;
+      color: black;
+      border: 1px solid transparent;
+      border-bottom: 1px solid black;
+  
+      padding: 5px;
+    }
+  
+    .textfields:hover,
+    .textfields:focus {
+      background-color: transparent;
+      color: black;
+    }
+  
+    input:-webkit-autofill,
+    input:-webkit-autofill:focus {
+      transition: background-color 600000s 0s, color 600000s 0s;
+    }
+  
+    .bttn-submit {
+      background-color: #091420;
+      color: white;
+      border: 1px solid transparent;
+      padding: 5px;
+      border-radius: 5px;
+    }
+  
+    .bttn-submit:hover {
+      background-color: white;
+      color: #091420;
+      border: 1px solid #091420;
+    }
+  </style>
+  

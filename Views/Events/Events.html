@@ -2,29 +2,47 @@
 
     <div class="sub-container">
         <div class="bttn-links">
-            <a class="bttn-add" href="/agendaPhp/addContact">Adicionar contatos</a>
+            <a class="bttn-add" href="/agendaPhp/addGroup">Adicionar eventos</a>
         </div>
-        <h1>Contatos</h1>
+        <h1>Eventos</h1>
         <div class="models-container">
+            {{#each events}}
             <div class="models-sub-container">
                 <div class="container-data">
                     <p><span class="bold">{{this.name}}</a></span></p>
-                    <p class="data-p"><span style="font-weight: 600;">Telefone:</span> {{this.fone}}</p>
-                    <p class="data-p"><span style="font-weight: 600;">Email:</span> {{this.email}}</p>
+                    {{#if this.description}}
+                    <p class="data-p"><span style="font-weight: 600;">Descrição:</span> {{this.description}}</p>
+                    {{/if}}
+                    {{#if this.eventDate}}
+                    <p class="data-p"><span style="font-weight: 600;">Data:</span> {{this.eventDate}}</p>
+                    {{/if}}
+                    {{#if this.Contacts}}
+                    <p class="data-p"><span style="font-weight: 600;">Contatos:</span>
+                        {{#each this.Contacts}}
+                        <span style="margin-right: auto;">
+                            {{this.name}} <span style="color: blue;">|</span>
+                        </span>
+                        {{/each}}
+                    </p>
+                    {{/if}}
                 </div>
                 <div class="container-options">
-                    <a id="bttn-edit" href="/contacts/edit/{{this.id}}"></a>
-                    <form action="/contacts/delete" method="post">
+                    <a id="bttn-edit" href="/events/edit/{{this.id}}"></a>
+                    <form action="/events/delete" method="post">
                         <input type="hidden" name="id" value="{{this.id}}">
                         <input type="submit" id="bttn-delete" value="">
                     </form>
+                    <a href="/events_contacts/addContact/{{this.id}}" id="bttn-addContact"></a>
+                    {{#if this.Contacts}}
+                        <a href="/events_contacts/editContacts/{{this.id}}" id="bttn-deleteContact"></a>
+                    {{/if}}
                 </div>
-
             </div>
             {{/each}}
         </div>
     </div>
 </div>
+
 <style>
     
     .bttn-add{

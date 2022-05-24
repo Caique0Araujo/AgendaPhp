@@ -13,7 +13,7 @@ class ControllerEvent
     public function indexAll()
     {
         $view = new EventView();
-        $view->render();
+        $view->dataContainer();
     }
 
     public function indexOne()
@@ -22,9 +22,13 @@ class ControllerEvent
 
     public function store()
     {
+        $view = new EventView();
+        $view->addForm();
     }
     public function update()
     {
+        $view = new EventView();
+        $view->editForm();
     }
     public function delete()
     {

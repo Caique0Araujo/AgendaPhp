@@ -12,7 +12,7 @@ class ControllerGroup
     public function indexAll()
     {
         $view = new GroupView();
-        $view->render();
+        $view->dataContainer();
     }
 
     public function indexOne()
@@ -21,9 +21,13 @@ class ControllerGroup
 
     public function store()
     {
+        $view = new GroupView();
+        $view->addForm();
     }
     public function update()
     {
+        $view = new GroupView();
+        $view->editForm();
     }
     public function delete()
     {

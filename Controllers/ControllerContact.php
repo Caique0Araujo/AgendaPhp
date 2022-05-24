@@ -14,7 +14,7 @@ class ControllerContact
     public function indexAll()
     {
         $view = new ContactView();
-        $view->render();
+        $view->dataContainer();
     }
 
     public function indexOne()
@@ -24,10 +24,12 @@ class ControllerContact
     public function store()
     {
         $view = new ContactView();
-        $view->form();
+        $view->addForm();
     }
     public function update()
     {
+        $view = new ContactView();
+        $view->editForm();
     }
     public function delete()
     {
