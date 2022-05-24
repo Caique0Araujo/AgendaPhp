@@ -23,6 +23,8 @@ class ControllerContact
 
     public function store()
     {
+        $view = new ContactView();
+        $view->form();
     }
     public function update()
     {
