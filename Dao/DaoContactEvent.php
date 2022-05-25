@@ -1,21 +1,26 @@
 <?php
 
+namespace Agenda\Dao;
+
+use PDO;
+use Agenda\Dao\Connection;
+
 class DaoContatoEvento {
 
-    public function listaTodos(){
+    public function getAll(){
 
         $lista = [];
-        $pst = Conexao::getPreparedStatement('select * from eventos_has_contatos');
+        $pst = Connection::getPreparedStatement('select * from eventos_has_contatos');
         $pst->execute();
         $lista = $pst->fetchAll(PDO::FETCH_ASSOC);
         return $lista;
 
     }
 
-    public function inclui(ContatoEvento $contatoEvento){
+    public function create(ContatoEvento $contatoEvento){
 
         $sql = 'insert into eventos_has_contatos (Eventos_id, Contatos_id) values (?, ?);';
-        $pst = Conexao::getPreparedStatement($sql);
+        $pst = Connection::getPreparedStatement($sql);
 
         $pst->bindValue(1, $contatoEvento->getEventos_id());
         $pst->bindValue(2, $contatoEvento->getContatos_id());
@@ -29,10 +34,10 @@ class DaoContatoEvento {
 
     }
 
-    public function excluirPorContato($id){
+    public function deleteByContact($id){
 
         $sql = 'delete from eventos_has_contatos where Contatos_id = ?';
-        $pst = Conexao::getPreparedStatement($sql);
+        $pst = Connection::getPreparedStatement($sql);
 
         $pst->bindValue(1, $id);
         if($pst->execute()){
@@ -42,10 +47,10 @@ class DaoContatoEvento {
         }
     }
 
-    public function excluirPorEvento($id){
+    public function deleteByEvent($id){
 
         $sql = 'delete from eventos_has_contatos where Eventos_id = ?';
-        $pst = Conexao::getPreparedStatement($sql);
+        $pst = Connection::getPreparedStatement($sql);
 
         $pst->bindValue(1, $id);
         if($pst->execute()){
@@ -55,9 +60,9 @@ class DaoContatoEvento {
         }
     }
 
-    public function listaVazia(){
+    public function isEmpty(){
 
-        $pst = Conexao::getPreparedStatement('select * from eventos_has_contatos');
+        $pst = Connection::getPreparedStatement('select * from eventos_has_contatos');
         $pst->execute();
         if($pst->rowCount() > 0){
             return false;
@@ -68,10 +73,10 @@ class DaoContatoEvento {
 
     }
 
-    public function excluir($idcon, $idevento){
+    public function delete($idcon, $idevento){
 
         $sql = 'delete from eventos_has_contatos where Contatos_id = ? and Eventos_id = ?';
-        $pst = Conexao::getPreparedStatement($sql);
+        $pst = Connection::getPreparedStatement($sql);
 
         $pst->bindValue(1, $idcon);
         $pst->bindValue(2, $idevento);

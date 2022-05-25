@@ -1,21 +1,26 @@
 <?php
 
+namespace Agenda\Dao;
+
+use PDO;
+use Agenda\Dao\Connection;
+
 class DaoEventos {
 
-    public function listaTodos(){
+    public function getAll(){
 
         $lista = [];
-        $pst = Conexao::getPreparedStatement('select * from eventos');
+        $pst = Connection::getPreparedStatement('select * from eventos');
         $pst->execute();
         $lista = $pst->fetchAll(PDO::FETCH_ASSOC);
         return $lista;
 
     }
 
-    public function listarPorUsuario($id){
+    public function getByUser($id){
         $lista = [];
         $sql = 'select * from eventos where Usuarios_id = ?';
-        $pst = Conexao::getPreparedStatement($sql);
+        $pst = Connection::getPreparedStatement($sql);
 
         $pst->bindValue(1, $id);
 
@@ -24,10 +29,10 @@ class DaoEventos {
         return $lista;
     }
 
-    public function listarPorId($id){
+    public function getById($id){
 
         $evento = new Evento();
-        $pst = Conexao::getPreparedStatement('SELECT * FROM eventos WHERE id = ?');
+        $pst = Connection::getPreparedStatement('SELECT * FROM eventos WHERE id = ?');
 
         $pst->bindValue(1, $id);
         $pst->execute();
@@ -37,7 +42,7 @@ class DaoEventos {
         return $evento;
     }
 
-    public function inclui(Evento $evento){
+    public function create(Evento $evento){
 
         $sql = 'insert into eventos (nome, data, descricao, Usuarios_id) values (?, ?, ?, ?)';
 
@@ -46,7 +51,7 @@ class DaoEventos {
             $descricao = $evento->getDescricao();
         }
 
-        $pst = Conexao::getPreparedStatement($sql);
+        $pst = Connection::getPreparedStatement($sql);
 
         $pst->bindValue(1, $evento->getNome());
         $pst->bindValue(2, $evento->getData());
@@ -60,10 +65,10 @@ class DaoEventos {
         }
     }
 
-    public function excluir($id){
+    public function delete($id){
 
         $sql = 'delete from eventos where id = ?';
-        $pst = Conexao::getPreparedStatement($sql);
+        $pst = Connection::getPreparedStatement($sql);
 
         $pst->bindValue(1, $id);
 
@@ -75,10 +80,10 @@ class DaoEventos {
 
     }
 
-    public function atualizar(Evento $evento){
+    public function update(Evento $evento){
 
         $sql = 'update eventos set nome = ?, data = ?, descricao = ? where id = ?';
-        $pst = Conexao::getPreparedStatement($sql);
+        $pst = Connection::getPreparedStatement($sql);
 
         $pst->bindValue(1, $evento->getNome());
         $pst->bindValue(2, $evento->getData());  
@@ -93,8 +98,8 @@ class DaoEventos {
 
     }
 
-    public function vazio(){
-        $pst = Conexao::getPreparedStatement('select * from eventos');
+    public function isEmpty(){
+        $pst = Connection::getPreparedStatement('select * from eventos');
         $pst->execute();
         
         if($pst->rowCount() < 1){

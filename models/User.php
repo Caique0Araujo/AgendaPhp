@@ -3,17 +3,19 @@
 class Usuario {
 
     private $id;
-    private $nome;
+    private $name;
     private $login;
-    private $senha;
+    private $password;
     private $fone;
     private $email;
-    private $ativo;
+    private $active;
 
     public function __construct()
     {
         
     }
+
+    
 
     /**
      * Get the value of id
@@ -36,21 +38,21 @@ class Usuario {
     }
 
     /**
-     * Get the value of nome
+     * Get the value of name
      */ 
-    public function getNome()
+    public function getName()
     {
-        return $this->nome;
+        return $this->name;
     }
 
     /**
-     * Set the value of nome
+     * Set the value of name
      *
      * @return  self
      */ 
-    public function setNome($nome)
+    public function setName($name)
     {
-        $this->nome = $nome;
+        $this->name = $name;
 
         return $this;
     }
@@ -76,21 +78,21 @@ class Usuario {
     }
 
     /**
-     * Get the value of senha
+     * Get the value of password
      */ 
-    public function getSenha()
+    public function getPassword()
     {
-        return $this->senha;
+        return $this->password;
     }
 
     /**
-     * Set the value of senha
+     * Set the value of password
      *
      * @return  self
      */ 
-    public function setSenha($senha)
+    public function setPassword($password)
     {
-        $this->senha = $senha;
+        $this->password = $password;
 
         return $this;
     }
@@ -136,21 +138,21 @@ class Usuario {
     }
 
     /**
-     * Get the value of ativo
+     * Get the value of active
      */ 
-    public function getAtivo()
+    public function getActive()
     {
-        return $this->ativo;
+        return $this->active;
     }
 
     /**
-     * Set the value of ativo
+     * Set the value of active
      *
      * @return  self
      */ 
-    public function setAtivo($ativo)
+    public function setActive($active)
     {
-        $this->ativo = $ativo;
+        $this->active = $active;
 
         return $this;
     }

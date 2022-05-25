@@ -2,8 +2,8 @@
 
 namespace Agenda\Controllers;
 
-use Agenda\Dao\DaoContato;
-use Agenda\Models\Contato;
+use Agenda\Dao\DaoContact;
+use Agenda\Models\Contact;
 use Agenda\Views\Contacts\ContactView;
 
 
@@ -31,13 +31,13 @@ class ControllerContact
     public function storeSave($name, $fone, $email)
     {
 
-        $contato = new Contato();
-        $contato->setNome($name);
-        $contato->setFone($fone);
-        $contato->setEmail($email);
+        $con = new Contact();
+        $con->setName($name);
+        $con->setFone($fone);
+        $con->setEmail($email);
 
-        $dao = new DaoContato();
-        $dao->inclui($contato);
+        $dao = new DaoContact();
+        $dao->create($con);
 
 
         $view = new ContactView();

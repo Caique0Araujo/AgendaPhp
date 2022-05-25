@@ -1,21 +1,27 @@
 <?php
 
+namespace Agenda\Dao;
+
+use PDO;
+use Agenda\Dao\Connection;
+use Agenda\Models\Group;
+
 class DaoGrupo {
 
-    public function listaTodos(){
+    public function getAll(){
 
         $lista = [];
-        $pst = Conexao::getPreparedStatement('select * from grupos');
+        $pst = Connection::getPreparedStatement('select * from grupos');
         $pst->execute();
         $lista = $pst->fetchAll(PDO::FETCH_ASSOC);
         return $lista;
 
     }
 
-    public function listarPorUsuario($id){
+    public function getByUser($id){
         $lista = [];
         $sql = 'select * from grupos where Usuarios_id = ?';
-        $pst = Conexao::getPreparedStatement($sql);
+        $pst = Connection::getPreparedStatement($sql);
 
         $pst->bindValue(1, $id);
 
@@ -24,10 +30,10 @@ class DaoGrupo {
         return $lista;
     }
 
-    public function listarPorId($id){
+    public function getById($id){
 
-        $grupo = new Grupo();
-        $pst = Conexao::getPreparedStatement('SELECT * FROM grupos WHERE id = ?');
+        $grupo = new Group();
+        $pst = Connection::getPreparedStatement('SELECT * FROM grupos WHERE id = ?');
 
         $pst->bindValue(1, $id);
         $pst->execute();
@@ -37,10 +43,10 @@ class DaoGrupo {
         return $grupo;
     }
 
-    public function inclui(Grupo $grupo){
+    public function create(Grupo $grupo){
 
         $sql = 'insert into grupos (nome, descricao, Usuarios_id) values (?, ?, ?)';
-        $pst = Conexao::getPreparedStatement($sql);
+        $pst = Connection::getPreparedStatement($sql);
 
         $pst->bindValue(1, $grupo->getNome());
         $pst->bindValue(2, $grupo->getDescricao());
@@ -54,10 +60,10 @@ class DaoGrupo {
 
     }
 
-    public function excluir($id){
+    public function delete($id){
 
         $sql = 'delete from grupos where id = ?';
-        $pst = Conexao::getPreparedStatement($sql);
+        $pst = Connection::getPreparedStatement($sql);
 
         $pst->bindValue(1, $id);
 
@@ -69,10 +75,10 @@ class DaoGrupo {
 
     }
 
-    public function atualizar(Grupo $grupo){
+    public function update(Group $grupo){
 
         $sql = 'update grupos set nome = ?, descricao = ? where id = ?';
-        $pst = Conexao::getPreparedStatement($sql);
+        $pst = Connection::getPreparedStatement($sql);
 
         $pst->bindValue(1, $grupo->getNome());
         $pst->bindValue(2, $grupo->getDescricao());
@@ -86,8 +92,8 @@ class DaoGrupo {
 
     }
 
-    public function vazio(){
-        $pst = Conexao::getPreparedStatement('select * from grupos');
+    public function isEmpty(){
+        $pst = Connection::getPreparedStatement('select * from grupos');
         $pst->execute();
         
         if($pst->rowCount() < 1){

@@ -6,32 +6,32 @@ use PDO;
 use PDOException;
 use PDOStatement;
 
-class Conexao{
+class Connection{
 
     private static $dsn = 'mysql:host=localhost;dbname=agendaTp2;port=3306';
-    private static $usuario = 'root';
-    private static $senha = '';
-    private static $conexao = null;
+    private static $user = 'root';
+    private static $password = '';
+    private static $Connection = null;
 
-    public static function getConexao() : PDO {
+    public static function getConnection() : PDO {
 
-        if(Conexao::$conexao == null){
+        if(Connection::$Connection == null){
             try{
-                Conexao::$conexao = new PDO (Conexao::$dsn, Conexao::$usuario, Conexao::$senha);
+                Connection::$Connection = new PDO (Connection::$dsn, Connection::$user, Connection::$password);
 
             }catch(PDOException $e){
                 echo $e->getMessage();
             }
         }
-        return Conexao::$conexao;
+        return Connection::$Connection;
 
     }
 
     public static function getPreparedStatement($sql) : PDOStatement {
         $pst = null;
-        if(Conexao::getConexao() != null){
+        if(Connection::getConnection() != null){
             try {
-                $pst = Conexao::$conexao->prepare(($sql));
+                $pst = Connection::$Connection->prepare(($sql));
             }catch(PDOException $e){
                 echo $e->getMessage();
             }
