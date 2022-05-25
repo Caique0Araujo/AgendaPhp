@@ -2,6 +2,8 @@
 
 namespace Agenda\Controllers;
 
+use Agenda\Dao\DaoContato;
+use Agenda\Models\Contato;
 use Agenda\Views\Contacts\ContactView;
 
 
@@ -25,6 +27,21 @@ class ControllerContact
     {
         $view = new ContactView();
         $view->addForm();
+    }
+    public function storeSave($name, $fone, $email)
+    {
+
+        $contato = new Contato();
+        $contato->setNome($name);
+        $contato->setFone($fone);
+        $contato->setEmail($email);
+
+        $dao = new DaoContato();
+        $dao->inclui($contato);
+
+
+        $view = new ContactView();
+        $view->dataContainer();
     }
     public function update()
     {

@@ -1,5 +1,11 @@
 <?php
 
+namespace Agenda\Dao;
+
+use PDO;
+use Agenda\Dao\Conexao;
+use Agenda\Models\Contato;
+
 class DaoContato {
 
     public function listaTodos(){

@@ -1,5 +1,8 @@
 <?php
 
+namespace Agenda\Models;
+
+
 class Contato {
 
     private $idcon;

@@ -1,9 +1,14 @@
 <?php
 
+namespace Agenda\Dao;
+
+use PDO;
+use PDOException;
+use PDOStatement;
 
 class Conexao{
 
-    private static $dsn = 'mysql:host=localhost;dbname=agendaTp2;port=3307';
+    private static $dsn = 'mysql:host=localhost;dbname=agendaTp2;port=3306';
     private static $usuario = 'root';
     private static $senha = '';
     private static $conexao = null;

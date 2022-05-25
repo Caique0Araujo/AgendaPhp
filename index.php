@@ -36,10 +36,19 @@ $app->any('/agendaPhp/contacts', function (Request $request, Response $response,
     return $response;
 });
 
-$app->any('/agendaPhp/addContact', function (Request $request, Response $response,) {
+$app->get('/agendaPhp/addContact', function (Request $request, Response $response,) {
     $controller = new ControllerContact();
     $controller->store();
     return $response;
+});
+
+$app->post('/agendaPhp/addContact', function(Request $request, Response $response){
+    $name = $_POST['name'];
+    $fone = $_POST['fone'];
+    $email = $_POST['email'];
+
+    $controller = new ControllerContact();
+    $controller->storeSave($name, $fone, $email);
 });
 
 $app->any('/agendaPhp/editContact', function (Request $request, Response $response,) {
