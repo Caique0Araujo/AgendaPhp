@@ -1,201 +1,266 @@
-<?php 
+<?php
 
-class DaoUsuarios {
+use Agenda\Dao\Connection;
+use Agenda\Models\User;
 
+class DaoUser
+{
 
-    public function logar($login, $senha){
-        
-        $pst = Conexao::getPreparedStatement("SELECT id, ativo FROM usuarios where usuarios.login = ? AND usuarios.senha = ?");
-        $pst->bindValue(1, $login);
-        $pst->bindValue(2, $senha);
-        $pst->execute();
-        if($pst->rowCount() > 0){
-            
-            $dado = $pst->fetch();
+    // It can be email aswell
+    public function login($login, $password)
+    {
 
-            if($dado['ativo']){
+        try {
+            $sql =
+                "SELECT id, active 
+        FROM users 
+        where (users.login = ? OR users.email = ?)
+        AND (users.password = ?) AND users.active = 1";
 
+            $pst = Connection::getPreparedStatement($sql);
+            $pst->bindValue(1, $login);
+            $pst->bindValue(2, $login);
+            $pst->bindValue(3, $password);
+            $pst->execute();
+            if ($pst->rowCount() > 0) {
+                $dado = $pst->fetch();
                 session_start();
                 $_SESSION['id'] = $dado['id'];
                 return true;
-
-            }else{
+            } else {
                 return false;
             }
-
-        }else{
-            return false;
-        }
-
-    }
-
-    public function listaTodos(){
-
-        $lista = [];
-        $pst = Conexao::getPreparedStatement('select * from usuarios');
-        $pst->execute();
-        $lista = $pst->fetchAll(PDO::FETCH_ASSOC);
-        return $lista;
-
-    }
-
-    public function listarPorId($id){
-
-        $usuario = new Usuario();
-        $pst = Conexao::getPreparedStatement('SELECT usuarios.id, usuarios.nome, usuarios.login, usuarios.senha, usuarios.fone, usuarios.email, usuarios.ativo FROM usuarios WHERE id = ?');
-
-        $pst->bindValue(1, $id);
-        $pst->execute();
-
-        $pst->setFetchMode(PDO::FETCH_CLASS, 'Usuario');
-        $usuario = $pst->fetch();
-        return $usuario;
-    }
-
-    public function validarLogin($login, $senha){
-
-        $sql = 'select * from usuarios where login = ? and senha = ?;';
-        $pst = Conexao::getPreparedStatement($sql);
-        $pst->bindValue(1, $login);
-        $pst->bindValue(2, $senha);
-
-        $pst->execute();
-
-        if($pst->rowCount() < 1)
-            return false;
-        else 
-            return true; 
-    }
-
-
-    public function verificarLogin2($login){
-
-        $sql = 'select * from usuarios where login = ?;';
-        $pst = Conexao::getPreparedStatement($sql);
-        $pst->bindValue(1, $login);
-
-        $pst->execute();
-
-        if($pst->rowCount() > 0){
-            return true;
-        }
-        else 
-            return false; 
-    }
-
-    public function getIdByLogin($login){
-
-        $sql = 'select id from usuarios where login = ?';
-        $pst = Conexao::getPreparedStatement($sql);
-
-        $pst->bindValue(1, $login);
-
-        if($pst->execute()){
-            $id = $pst->fetch(PDO::FETCH_COLUMN);
-            return $id;
-        } else {
-            return false;
-        }
-
-    }
-
-    public function login($id){
-
-        $sql = 'update usuarios set ativo = 1 where id = ?;';
-
-        $pst = Conexao::getPreparedStatement($sql);
-        $pst->bindValue(1, $id);
-
-        if($pst->execute()){
-            return true;
-        } else {
-            return false;
+        } catch (PDOException $e) {
+            echo $e->getMessage();
         }
     }
 
-   public function usuarioLogadoExiste($id){
 
-        $sql = 'select * from usuarios where id = ?';
-        $pst = Conexao::getPreparedStatement($sql);
-        $pst->bindValue(1, $id);
+    public function getAll()
+    {
 
-        $pst->execute();
+        try {
+            $sql =
+                'SELECT  users.id, users.name, users.login, users.email, users.password, users.fone, users.active
+        FROM users';
 
-        if($pst->rowCount() > 0){
-            return true;
-        }else{
-            return false;
+            $pst = Connection::getPreparedStatement($sql);
+            $pst->execute();
+            $lista = [];
+            $lista = $pst->fetchAll(PDO::FETCH_ASSOC);
+            return $lista;
+        } catch (PDOException $e) {
+            echo $e->getMessage();
         }
     }
 
-    public function inclui(Usuario $usuario){
+    public function getById($id)
+    {
 
-        $sql = 'insert into usuarios (nome, login, senha, fone, email) values (?, ?, ?, ?, ?)';
-        $pst = Conexao::getPreparedStatement($sql);
+        try {
+            $sql =
+                'SELECT users.name, users.login, users.email, users.password, users.fone, users.active 
+        FROM users 
+        WHERE id = ?';
 
-        $email = null;
-        if($usuario->getEmail() != null){
-            $email = $usuario->getEmail();
+            $pst = Connection::getPreparedStatement($sql);
+
+            $pst->bindValue(1, $id);
+            $pst->execute();
+
+            $pst->setFetchMode(PDO::FETCH_CLASS, 'Usuario');
+            $usuario = new User();
+            $usuario = $pst->fetch();
+            return $usuario;
+        } catch (PDOException $e) {
+            echo $e->getMessage();
         }
+    }
 
-        $pst->bindValue(1, $usuario->getNome());
-        $pst->bindValue(2, $usuario->getLogin());
-        $pst->bindValue(3, $usuario->getSenha());
-        $pst->bindValue(4, $usuario->getFone());
-        $pst->bindValue(5, $email);
+    public function authLogin($login, $password)
+    {
+        try {
+            $sql =
+                'SELECT users.name, users.login, users.email, users.password, users.fone, users.active  
+        FROM users 
+        WHERE (users.login = ? OR users.email = ?) 
+        AND users.password = ?;';
 
-        if($pst->execute()){
-            return true;
-        } else {
-            return false;
+            $pst = Connection::getPreparedStatement($sql);
+            $pst->bindValue(1, $login);
+            $pst->bindValue(2, $login);
+            $pst->bindValue(3, $password);
+
+            $pst->execute();
+
+            if ($pst->rowCount() < 1)
+                return false;
+            else
+                return true;
+        } catch (PDOException $e) {
+            echo $e->getMessage();
         }
-
     }
 
 
-    public function atualizar(Usuario $usuario){
+    public function getIdByLogin($login)
+    {
 
-        $sql = 
+        try {
+            $sql =
+                'SELECT id 
+        FROM users 
+        WHERE users.login = ? OR users.email = ?';
+            $pst = Connection::getPreparedStatement($sql);
 
-        'UPDATE usuarios SET usuarios.nome = ?, usuarios.login = ?, usuarios.senha = ?, usuarios.fone = ?, usuarios.email = ?, usuarios.ativo = ? where id = ?';
-        $pst = Conexao::getPreparedStatement($sql);
+            $pst->bindValue(1, $login);
+            $pst->bindValue(2, $login);
 
-        $pst->bindValue(1, $usuario->getNome());
-        $pst->bindValue(2, $usuario->getLogin());
-        $pst->bindValue(3, $usuario->getSenha());
-        $pst->bindValue(4, $usuario->getFone());
-        $pst->bindValue(5, $usuario->getEmail());
-        $pst->bindValue(6, 1);
-        $pst->bindValue(7, $usuario->getId());
-
-        if($pst->execute()){
-            return true;
-        } else {
-            return false;
+            if ($pst->execute()) {
+                $id = $pst->fetch(PDO::FETCH_COLUMN);
+                return $id;
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            echo $e->getMessage();
         }
-
     }
 
-    public function excluir($id){
 
-        $sql = 
-        '
-        DELETE ec.* FROM grupos_has_contatos AS ec INNER JOIN contatos as c ON c.id = ec.Contatos_id where c.Usuarios_id = '.$id.';
-        DELETE ec.* FROM eventos_has_contatos AS ec INNER JOIN contatos as c ON c.id = ec.Contatos_id where c.Usuarios_id = '.$id.';
-        DELETE FROM contatos where Usuarios_id = '.$id.';
-        DELETE FROM frupos where Usuarios_id = '.$id.';
-        DELETE FROM eventos where Usuarios_id = '.$id.';
-        DELETE FROM usuarios where id = '.$id.';
+    public function create(User $user)
+    {
+
+        try {
+            $sql =
+                'INSERT 
+        INTO users (name, login, password, email, fone) 
+        values (?, ?, ?, ?, ?)';
+            $pst = Connection::getPreparedStatement($sql);
+
+            $fone = null;
+            if ($user->getFone() != null) {
+                $fone = $user->getFone();
+            }
+
+            $pst->bindValue(1, $user->getName());
+            $pst->bindValue(2, $user->getLogin());
+            $pst->bindValue(3, $user->getPassword());
+            $pst->bindValue(4, $user->getEmail());
+            $pst->bindValue(5, $fone);
+
+            if ($pst->execute()) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
+    }
+
+
+    public function update(User $user)
+    {
+
+        try {
+            $fone = null;
+            if ($user->getFone() != null) {
+                $fone = $user->getFone();
+            }
+
+            $sql =
+                'UPDATE users 
+            SET users.nome = ?, 
+            users.login = ?, 
+            users.password = ?, 
+            users.fone = ?, 
+            users.email = ?, 
+            where id = ?';
+            $pst = Connection::getPreparedStatement($sql);
+
+            $pst->bindValue(1, $user->getName());
+            $pst->bindValue(2, $user->getLogin());
+            $pst->bindValue(3, $user->getPassword());
+            $pst->bindValue(4, $fone);
+            $pst->bindValue(5, $user->getEmail());
+            $pst->bindValue(6, $user->getId());
+
+            if ($pst->execute()) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
+    }
+
+    public function delete($id)
+    {
+
+        try {
+            $sql =
+                'UPDATE users
+        SET active = 0 
+        WHERE id = ? ';
+            $pst = Connection::getPreparedStatement($sql);
+
+            $pst->bindValue(1, $id);
+
+            if ($pst->execute()) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
+    }
+
+ /*   public function excluir($id)
+    {
+
+        $sql =
+            '
+        DELETE ec.* FROM grupos_has_contatos AS ec INNER JOIN contatos as c ON c.id = ec.Contatos_id where c.Usuarios_id = ' . $id . ';
+        DELETE ec.* FROM eventos_has_contatos AS ec INNER JOIN contatos as c ON c.id = ec.Contatos_id where c.Usuarios_id = ' . $id . ';
+        DELETE FROM contatos where Usuarios_id = ' . $id . ';
+        DELETE FROM frupos where Usuarios_id = ' . $id . ';
+        DELETE FROM eventos where Usuarios_id = ' . $id . ';
+        DELETE FROM usuarios where id = ' . $id . ';
         ';
 
-        $pst = Conexao::getPreparedStatement($sql);
+        $pst = Connection::getPreparedStatement($sql);
 
-        if($pst->execute()){
+        if ($pst->execute()) {
             return true;
         } else {
             return false;
         }
+    }*/
 
+    public function isActive($id){
+        try {
+
+            $sql = 
+            'SELECT users.active
+            FROM users
+            WHERE id = ?';
+
+            $pst = Connection::getPreparedStatement($sql);
+            $pst->bindValue(1, $id);
+            $pst->execute();
+            
+            if ($pst->rowCount() < 1)
+                return false;
+            else
+                return true;
+
+            
+            
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
     }
-
 }

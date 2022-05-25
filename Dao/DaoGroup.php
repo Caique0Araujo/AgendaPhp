@@ -5,104 +5,184 @@ namespace Agenda\Dao;
 use PDO;
 use Agenda\Dao\Connection;
 use Agenda\Models\Group;
+use PDOException;
 
-class DaoGrupo {
+class DaoGroup
+{
 
-    public function getAll(){
+    public function getAll($User_id)
+    {
 
-        $lista = [];
+        try {
+            $sql =
+                "SELECT groups.id, groups.name, groups.description
+        FROM groups 
+        WHERE Users_id = ? 
+        AND = active = 1";
+
+            $pst = Connection::getPreparedStatement($sql);
+            $pst->bindValue(1, $User_id);
+            $pst->execute();
+            $lista = [];
+            $lista = $pst->fetchAll(PDO::FETCH_ASSOC);
+            return $lista;
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
+    }
+
+    public function getById($id, $User_id)
+    {
+        try {
+            $sql =
+                'SELECT groups.name, groups.description
+        FROM groups 
+        WHERE id = ? 
+        AND Users_id = ?
+        AND groups.active = 1';
+
+            $pst = Connection::getPreparedStatement($sql);
+
+            $pst->bindValue(1, $id);
+            $pst->bindValue(2, $User_id);
+
+            $pst->execute();
+
+            $pst->setFetchMode(PDO::FETCH_CLASS, 'Grupo');
+            $grupo = new Group();
+            $grupo = $pst->fetch();
+            return $grupo;
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
+    }
+
+    public function create(Group $group)
+    {
+
+        try {
+            $sql =
+                'INSERT 
+        INTO groups (name, description, Users_id) 
+        values (?, ?, ?)';
+            $pst = Connection::getPreparedStatement($sql);
+
+            $pst->bindValue(1, $group->getName());
+            $pst->bindValue(2, $group->getDescription());
+            $pst->bindValue(3, $group->getUser_id());
+
+            if ($pst->execute()) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
+    }
+
+    public function delete($id, $User_id)
+    {
+
+        try {
+            $sql =
+                'UPDATE groups
+        SET active = 0 
+        WHERE id = ? 
+        AND Users_id = ?';
+            $pst = Connection::getPreparedStatement($sql);
+
+            $pst->bindValue(1, $id);
+            $pst->bindValue(2, $User_id);
+
+            if ($pst->execute()) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
+    }
+
+    public function update(Group $group)
+    {
+
+        try {
+            $sql =
+                'UPDATE groups 
+        SET name = ?, description = ? 
+        WHERE id = ?';
+            $pst = Connection::getPreparedStatement($sql);
+
+            $pst->bindValue(1, $group->getName());
+            $pst->bindValue(2, $group->getDescription());
+            $pst->bindValue(3, $group->getId());
+
+            if ($pst->execute()) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
+    }
+
+    public function isEmpty()
+    {
         $pst = Connection::getPreparedStatement('select * from grupos');
         $pst->execute();
-        $lista = $pst->fetchAll(PDO::FETCH_ASSOC);
-        return $lista;
 
-    }
-
-    public function getByUser($id){
-        $lista = [];
-        $sql = 'select * from grupos where Usuarios_id = ?';
-        $pst = Connection::getPreparedStatement($sql);
-
-        $pst->bindValue(1, $id);
-
-        $pst->execute();
-        $lista = $pst->fetchAll(PDO::FETCH_ASSOC);
-        return $lista;
-    }
-
-    public function getById($id){
-
-        $grupo = new Group();
-        $pst = Connection::getPreparedStatement('SELECT * FROM grupos WHERE id = ?');
-
-        $pst->bindValue(1, $id);
-        $pst->execute();
-
-        $pst->setFetchMode(PDO::FETCH_CLASS, 'Grupo');
-        $grupo = $pst->fetch();
-        return $grupo;
-    }
-
-    public function create(Grupo $grupo){
-
-        $sql = 'insert into grupos (nome, descricao, Usuarios_id) values (?, ?, ?)';
-        $pst = Connection::getPreparedStatement($sql);
-
-        $pst->bindValue(1, $grupo->getNome());
-        $pst->bindValue(2, $grupo->getDescricao());
-        $pst->bindValue(3, $grupo->getUsuario_id());
-
-        if($pst->execute()){
+        if ($pst->rowCount() < 1) {
             return true;
         } else {
             return false;
         }
-
     }
+    public function isActive($id)
+    {
+        try {
 
-    public function delete($id){
+            $sql =
+                'SELECT groups.active
+            FROM groups
+            WHERE id = ?';
 
-        $sql = 'delete from grupos where id = ?';
-        $pst = Connection::getPreparedStatement($sql);
+            $pst = Connection::getPreparedStatement($sql);
+            $pst->bindValue(1, $id);
+            $pst->execute();
 
-        $pst->bindValue(1, $id);
-
-        if($pst->execute()){
-            return true;
-        }else{
-            return false;
+            if ($pst->rowCount() < 1)
+                return false;
+            else
+                return true;
+        } catch (PDOException $e) {
+            echo $e->getMessage();
         }
-
     }
 
-    public function update(Group $grupo){
+    public function active($id, $User_id)
+    {
 
-        $sql = 'update grupos set nome = ?, descricao = ? where id = ?';
-        $pst = Connection::getPreparedStatement($sql);
+        try {
+            $sql =
+                'UPDATE groups
+        SET active = 1 
+        WHERE id = ? 
+        AND Users_id = ?';
+            $pst = Connection::getPreparedStatement($sql);
 
-        $pst->bindValue(1, $grupo->getNome());
-        $pst->bindValue(2, $grupo->getDescricao());
-        $pst->bindValue(3, $grupo->getIdgroup());     
+            $pst->bindValue(1, $id);
+            $pst->bindValue(2, $User_id);
 
-        if($pst->execute()){
-            return true;
-        }else{
-            return false;
+            if ($pst->execute()) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            echo $e->getMessage();
         }
-
     }
-
-    public function isEmpty(){
-        $pst = Connection::getPreparedStatement('select * from grupos');
-        $pst->execute();
-        
-        if($pst->rowCount() < 1){
-            return true;
-        }else{
-            return false;
-        }
-
-    }
-
-
 }

@@ -4,26 +4,46 @@ namespace Agenda\Dao;
 
 use PDO;
 use Agenda\Dao\Connection;
-use ContactGroup;
+use Agenda\Models\ContactGroup;
+use PDOException;
 
-class DaoContatoGrupo
+
+class DaoContactGroup
 {
 
-    public function getAll()
+    public function getAll($User_id)
     {
 
-        $list = [];
-        $pst = Connection::getPreparedStatement('select * from groups_has_contacts');
-        $pst->execute();
-        $list = $pst->fetchAll(PDO::FETCH_ASSOC);
-        return $list;
+        try {
+            $sql =
+                'SELECT groups_has_contacts.Groups_id, groups_has_contacts.Contacts_id
+        FROM groups_has_contacts
+        WHERE Users_id = ?
+        AND active = 1';
+
+            $pst = Connection::getPreparedStatement($sql);
+            $pst->bindValue(1, $User_id);
+            $pst->execute();
+            $lista = [];
+            $lista = $pst->fetchAll(PDO::FETCH_ASSOC);
+            return $lista;
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
     }
 
-    public function getByGroup($id)
+    public function getByGroup($id, $User_id)
     {
-        $list = [];
-        $pst = Connection::getPreparedStatement('select * from groups_has_contacts where Grupos_id =' . $id . ';');
+        $sql = 
+        'SELECT groups_has_contacts.Groups_id, groups_has_contacts.Contacts_id
+        FROM groups_has_contacts 
+        WHERE Groups_id = ? 
+        AND Users_id = ?;';
+        $pst = Connection::getPreparedStatement($sql);
+        $pst->bindValue(1, $id);
+        $pst->bindValue(2, $User_id);
         $pst->execute();
+        $list = [];
         $list = $pst->fetchAll(PDO::FETCH_ASSOC);
         return $list;
     }
@@ -31,11 +51,16 @@ class DaoContatoGrupo
     public function create(ContactGroup $contactGroup)
     {
 
-        $sql = 'insert into groups_has_contacts(Contatos_id, Grupos_id) values (?, ?)';
+        $sql = 
+        'INSERT 
+        INTO groups_has_contacts(Contacts_id, Groups_id, Users_id) 
+        VALUES (?, ?, ?)';
+
         $pst = Connection::getPreparedStatement($sql);
 
         $pst->bindValue(1, $contactGroup->getGroup_id());
         $pst->bindValue(2, $contactGroup->getContact_id());
+        $pst->bindValue(3, $contactGroup->getUser_id());
 
 
         if ($pst->execute()) {
@@ -46,13 +71,18 @@ class DaoContatoGrupo
     }
 
 
-    public function deleteByContact($id)
+    public function deleteByContact($id, $User_id)
     {
 
-        $sql = 'delete from groups_has_contacts where Contatos_id = ?';
+        $sql = 
+        'DELETE 
+        FROM groups_has_contacts 
+        WHERE Contacts_id = ?
+        AND Users_id = ?';
         $pst = Connection::getPreparedStatement($sql);
 
         $pst->bindValue(1, $id);
+        $pst->bindValue(2, $User_id);
         if ($pst->execute()) {
             return true;
         } else {
@@ -60,13 +90,18 @@ class DaoContatoGrupo
         }
     }
 
-    public function deleteByGroup($id)
+    public function deleteByGroup($id, $User_id)
     {
 
-        $sql = 'delete from groups_has_contacts where Grupos_id = ?';
+        $sql = 
+        'DELETE 
+        FROM groups_has_contacts 
+        WHERE Groups_id = ?
+        AND Users_id = ?';
         $pst = Connection::getPreparedStatement($sql);
 
         $pst->bindValue(1, $id);
+        $pst->bindValue(2, $User_id);
         if ($pst->execute()) {
             return true;
         } else {
@@ -74,14 +109,20 @@ class DaoContatoGrupo
         }
     }
 
-    public function delete($idGrupo, $idContato)
+    public function delete($Group_id, $Contact_id, $User_id)
     {
 
-        $sql = 'delete from groups_has_contacts where Grupos_id = ? and Contatos_id = ?';
+        $sql = 
+        'DELETE 
+        FROM groups_has_contacts 
+        WHERE Groups_id = ?
+        AND Contacts_id = ?
+        AND Users_id = ?';
         $pst = Connection::getPreparedStatement($sql);
 
-        $pst->bindValue(1, $idGrupo);
-        $pst->bindValue(2, $idContato);
+        $pst->bindValue(1, $Group_id);
+        $pst->bindValue(2, $Contact_id);
+        $pst->bindValue(3, $User_id);
         if ($pst->execute()) {
             return true;
         } else {
@@ -89,15 +130,25 @@ class DaoContatoGrupo
         }
     }
 
-    public function isEmpty()
+    public function isEmpty($User_id)
     {
+        try {
+            $sql =
+                'SELECT * 
+        FROM groups_has_contacts
+        WHERE Users_id = ?';
 
-        $pst = Connection::getPreparedStatement('select * from groups_has_contacts');
-        $pst->execute();
-        if ($pst->rowCount() > 0) {
-            return false;
-        } else {
-            return true;
+            $pst = Connection::getPreparedStatement($sql);
+            $pst->bindValue(1, $User_id);
+            $pst->execute();
+
+            if ($pst->rowCount() < 1) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            echo $e->getMessage();
         }
     }
 }

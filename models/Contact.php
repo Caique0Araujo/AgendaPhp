@@ -9,6 +9,7 @@ class Contact {
     private $name;
     private $fone;
     private $email;
+    private $active;
     private $User_id;
 
 
@@ -115,6 +116,26 @@ class Contact {
     public function setUser_id($User_id)
     {
         $this->User_id = $User_id;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of active
+     */ 
+    public function getActive()
+    {
+        return $this->active;
+    }
+
+    /**
+     * Set the value of active
+     *
+     * @return  self
+     */ 
+    public function setActive($active)
+    {
+        $this->active = $active;
 
         return $this;
     }

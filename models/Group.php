@@ -1,10 +1,13 @@
 <?php
 
-class Grupo{
+namespace Agenda\Models;
+
+class Group{
 
     private $id;
     private $name;     
     private $description;
+    private $active;
     private $User_id;
 
     public function __construct()
@@ -91,6 +94,26 @@ class Grupo{
     public function setUser_id($User_id)
     {
         $this->User_id = $User_id;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of active
+     */ 
+    public function getActive()
+    {
+        return $this->active;
+    }
+
+    /**
+     * Set the value of active
+     *
+     * @return  self
+     */ 
+    public function setActive($active)
+    {
+        $this->active = $active;
 
         return $this;
     }

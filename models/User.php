@@ -1,6 +1,8 @@
 <?php
 
-class Usuario {
+namespace Agenda\Models;
+
+class User {
 
     private $id;
     private $name;
