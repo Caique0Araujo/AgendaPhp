@@ -1,5 +1,9 @@
 <?php
 
+namespace Agenda\Dao;
+
+use PDOException;
+use PDO;
 use Agenda\Dao\Connection;
 use Agenda\Models\User;
 
@@ -216,6 +220,25 @@ class DaoUser
         } catch (PDOException $e) {
             echo $e->getMessage();
         }
+    }
+
+    public function verifyPassword($password, $login){
+        $sql = 
+        'SELECT users.password
+        FROM users
+        WHERE login = ? OR email = ?';
+        $pst = Connection::getPreparedStatement($sql);
+        $pst->bindValue(1, $login);
+        $pst->bindValue(2, $login);
+        $pst->execute();
+
+        $bdPassword = $pst->fetch(PDO::FETCH_COLUMN);
+        if(password_verify($password, $bdPassword)){
+            return true;
+        }
+        return false;
+    
+
     }
 
  /*   public function excluir($id)

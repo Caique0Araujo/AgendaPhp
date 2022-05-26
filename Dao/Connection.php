@@ -8,7 +8,7 @@ use PDOStatement;
 
 class Connection{
 
-    private static $dsn = 'mysql:host=localhost;dbname=agendaTp2;port=3306';
+    private static $dsn = 'mysql:host=localhost;dbname=agendatwii;port=3306';
     private static $user = 'root';
     private static $password = '';
     private static $Connection = null;

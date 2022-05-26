@@ -5,6 +5,7 @@ namespace Agenda;
 use Agenda\Controllers\ControllerContact;
 use Agenda\Controllers\ControllerEvent;
 use Agenda\Controllers\ControllerGroup;
+use Agenda\Controllers\ControllerUser;
 use Agenda\Views\HomeView;
 
 use Psr\Http\Message\ResponseInterface as Response;
@@ -26,6 +27,30 @@ $app->any('/agendaPhp/home', function (Request $request, Response $response,) {
     $controller->render();
     return $response;
 });
+
+// USERS ROUTES
+
+$app->get('/agendaPhp/register', function (Request $request, Response $response){
+    $controller = new ControllerUser();
+    $controller->renderRegister();
+    return $response;
+});
+
+$app->post('/agendaPhp/register', function (Request $request, Response $response){
+    $controller = new ControllerUser();
+    $data = $request->getParsedBody();
+    $controller->register($data);
+    return $response;
+});
+
+$app->get('/agendaPhp/login', function (Request $request, Response $response){
+    $controller = new ControllerUser();
+    $controller->renderLogin();
+    return $response;
+});
+
+
+
 
 // CONTACT ROUTES
 
