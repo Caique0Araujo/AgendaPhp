@@ -11,20 +11,18 @@ class DaoUser
 {
 
     // It can be email aswell
-    public function login($login, $password)
+    public function login($login)
     {
 
         try {
             $sql =
                 "SELECT id, active 
         FROM users 
-        where (users.login = ? OR users.email = ?)
-        AND (users.password = ?) AND users.active = 1";
+        where (users.login = ? OR users.email = ?) AND users.active = 1";
 
             $pst = Connection::getPreparedStatement($sql);
             $pst->bindValue(1, $login);
             $pst->bindValue(2, $login);
-            $pst->bindValue(3, $password);
             $pst->execute();
             if ($pst->rowCount() > 0) {
                 $dado = $pst->fetch();
@@ -62,8 +60,10 @@ class DaoUser
     {
 
         try {
+        $user = new User();
+
             $sql =
-                'SELECT users.name, users.login, users.email, users.password, users.fone, users.active 
+                'SELECT users.id, users.name, users.login, users.email, users.password, users.fone, users.active 
         FROM users 
         WHERE id = ?';
 
@@ -71,11 +71,10 @@ class DaoUser
 
             $pst->bindValue(1, $id);
             $pst->execute();
-
-            $pst->setFetchMode(PDO::FETCH_CLASS, 'Usuario');
-            $usuario = new User();
-            $usuario = $pst->fetch();
-            return $usuario;
+            
+            $pst->setFetchMode(PDO::FETCH_CLASS, "User");
+            $user = $pst->fetch();
+            return $user;
         } catch (PDOException $e) {
             echo $e->getMessage();
         }
@@ -83,24 +82,31 @@ class DaoUser
 
     public function authLogin($login, $password)
     {
+
         try {
             $sql =
-                'SELECT users.name, users.login, users.email, users.password, users.fone, users.active  
+                'SELECT users.password 
         FROM users 
-        WHERE (users.login = ? OR users.email = ?) 
-        AND users.password = ?;';
+        WHERE (users.login = ? OR users.email = ?);';
 
             $pst = Connection::getPreparedStatement($sql);
             $pst->bindValue(1, $login);
             $pst->bindValue(2, $login);
-            $pst->bindValue(3, $password);
+           // $pst->bindValue(3, $password);
 
             $pst->execute();
 
             if ($pst->rowCount() < 1)
                 return false;
-            else
+
+
+            $passwordBd = $pst->fetch(PDO::FETCH_COLUMN);
+
+            if(password_verify($password, $passwordBd))
                 return true;
+            
+            return false;
+            
         } catch (PDOException $e) {
             echo $e->getMessage();
         }
@@ -128,6 +134,25 @@ class DaoUser
             }
         } catch (PDOException $e) {
             echo $e->getMessage();
+        }
+    }
+
+    public function getPasswordByLogin($login){
+        try {
+            $sql = 
+            'SELECT users.password 
+            FROM users
+            WHERE users.login = ? OR users.email = ?';
+
+            $pst = Connection::getPreparedStatement($sql);
+            $pst->bindValue(1, $login);
+            $pst->bindValue(2, $login);
+            $pst->execute();
+            $password = $pst->fetch(PDO::FETCH_COLUMN);
+            return $password;
+
+        } catch (\Throwable $th) {
+            //throw $th;
         }
     }
 

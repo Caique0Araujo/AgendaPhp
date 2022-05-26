@@ -5,6 +5,7 @@ namespace Agenda\Controllers;
 use Agenda\Models\User;
 use Agenda\Views\Users\UserView;
 use Agenda\Dao\DaoUser;
+use Agenda\Views\HomeView;
 
 class ControllerUser
 {
@@ -33,7 +34,38 @@ class ControllerUser
 
     public function login($data)
     {
-        
+        if(!empty($data['login'])){
+            $login = $data['login'];
+        }
+        if(!empty($data['email'])){
+            $login = $data['email'];
+        }
+
+        if(!isset($login)){
+            echo 'Insira login ou email!';
+            return;
+        }
+
+        if(empty($data['password'])){
+            echo 'Insira senha!';
+            return;
+        }
+
+        $password = $data['password'];
+
+        $dao = new DaoUser();
+
+        if(!$dao->authLogin($login, $password)){
+            echo 'Credenciais inválidas!';
+            return;
+        }
+
+        if($dao->login($login)){
+            $view = new HomeView();
+            $view->render();
+        }
+
+
 
     }
 
@@ -63,6 +95,7 @@ class ControllerUser
         
         $view = new UserView();
         $view->render();
+
     }
 
     public function update()

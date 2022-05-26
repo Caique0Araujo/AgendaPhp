@@ -7,9 +7,9 @@ class User {
     private $id;
     private $name;
     private $login;
+    private $email;
     private $password;
     private $fone;
-    private $email;
     private $active;
 
     public function __construct()

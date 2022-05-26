@@ -6,6 +6,7 @@ use Agenda\Controllers\ControllerContact;
 use Agenda\Controllers\ControllerEvent;
 use Agenda\Controllers\ControllerGroup;
 use Agenda\Controllers\ControllerUser;
+use Agenda\Middlewares\AuthSession;
 use Agenda\Views\HomeView;
 
 use Psr\Http\Message\ResponseInterface as Response;
@@ -19,14 +20,21 @@ require_once './vendor/autoload.php';
 
 $app = AppFactory::create();
 
+$auth = function($request, $response){
+    $auth = new AuthSession();
+    $auth->verifySession();
+    $auth->verifyUser();
+    return $response;
+};
+
 
 // MAIN ROUTES
 
-$app->any('/agendaPhp/home', function (Request $request, Response $response,) {
+$app->any('/agendaPhp/home', function (Request $request, Response $response) {
     $controller = new HomeView();
     $controller->render();
     return $response;
-});
+})->add($auth);
 
 // USERS ROUTES
 
@@ -49,6 +57,14 @@ $app->get('/agendaPhp/login', function (Request $request, Response $response){
     return $response;
 });
 
+$app->post('/agendaPhp/login', function (Request $request, Response $response){
+    $controller = new ControllerUser();
+    $data = $request->getParsedBody();
+
+    $controller->login($data);
+    return $response;
+});
+
 
 
 
@@ -59,7 +75,7 @@ $app->any('/agendaPhp/contacts', function (Request $request, Response $response,
     $controller = new ControllerContact();
     $controller->indexAll();
     return $response;
-});
+})->add($auth);
 
 $app->get('/agendaPhp/addContact', function (Request $request, Response $response,) {
     $controller = new ControllerContact();
