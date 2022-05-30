@@ -13,7 +13,7 @@
                     <p class="data-p"><span style="font-weight: 600;">Email:</span> {{this.email}}</p>
                 </div>
                 <div class="container-options">
-                    <a id="bttn-edit" href="/contacts/edit/{{this.id}}"></a>
+                    <a id="bttn-edit" href="/agendaPhp/editContact/<?php echo $id?>"></a>
                     <form action="/contacts/delete" method="post">
                         <input type="hidden" name="id" value="{{this.id}}">
                         <input type="submit" id="bttn-delete" value="">

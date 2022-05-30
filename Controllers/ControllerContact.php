@@ -43,12 +43,34 @@ class ControllerContact
         $view = new ContactView();
         $view->dataContainer();
     }
-    public function update()
+    public function update($id)
     {
+        $dao = new DaoContact();
+        $contact = $dao->getById($id);
         $view = new ContactView();
-        $view->editForm();
+        $view->editForm($contact);
     }
-    public function delete()
+    public function updateSave($id, $name, $fone, $email){
+        $con = new Contact();
+
+        $con->setId($id);
+        $con->setName($name);
+        $con->setEmail($email);
+        $con->setFone($fone);
+        $con->setUser_id($_SESSION['id']);
+
+        $dao = new DaoContact();
+        $dao->update($con);
+        $view = new ContactView();
+        $view->dataContainer();
+
+    }
+
+    public function delete($id)
     {
+        $dao = new DaoContact();
+        $dao->delete($id, $_SESSION['id']);
+        $view = new ContactView();
+        $view->dataContainer();
     }
 }
