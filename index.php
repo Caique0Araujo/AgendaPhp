@@ -66,6 +66,12 @@ $app->post('/agendaPhp/login', function (Request $request, Response $response) {
     return $response;
 });
 
+$app->get('/agendaPhp/editUser', function (Request $request, Response $response) {
+    $controller = new ControllerUser();
+    $controller->update();
+    return $response;
+});
+
 
 
 

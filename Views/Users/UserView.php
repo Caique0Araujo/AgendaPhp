@@ -20,7 +20,7 @@ class UserView
     }
     public function editForm(){
         $title = 'Editar Usuário';
-        $content = file_get_contents('./views/Users/editGroups.html');
+        $content = file_get_contents('./views/Users/editUser.html');
         require_once './Views/templates/main.phtml';
     }
     public function login(){
