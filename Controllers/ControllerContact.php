@@ -16,7 +16,10 @@ class ControllerContact
     public function indexAll()
     {
         $view = new ContactView();
-        $view->dataContainer();
+        $contacts = [];
+        $dao = new DaoContact();
+        $contacts = $dao->getAll($_SESSION['id']);
+        $view->dataContainer($contacts);
     }
 
     public function indexOne()
@@ -35,13 +38,17 @@ class ControllerContact
         $con->setName($name);
         $con->setFone($fone);
         $con->setEmail($email);
+        $con->setUser_id($_SESSION['id']);
 
         $dao = new DaoContact();
         $dao->create($con);
 
 
         $view = new ContactView();
-        $view->dataContainer();
+        $contacts = [];
+        $dao = new DaoContact();
+        $contacts = $dao->getAll($_SESSION['id']);
+        $view->dataContainer($contacts);
     }
     public function update($id)
     {
@@ -62,7 +69,10 @@ class ControllerContact
         $dao = new DaoContact();
         $dao->update($con);
         $view = new ContactView();
-        $view->dataContainer();
+        $contacts = [];
+        $dao = new DaoContact();
+        $contacts = $dao->getAll($_SESSION['id']);
+        $view->dataContainer($contacts);
 
     }
 
@@ -71,6 +81,9 @@ class ControllerContact
         $dao = new DaoContact();
         $dao->delete($id, $_SESSION['id']);
         $view = new ContactView();
-        $view->dataContainer();
+        $contacts = [];
+        $dao = new DaoContact();
+        $contacts = $dao->getAll($_SESSION['id']);
+        $view->dataContainer($contacts);
     }
 }

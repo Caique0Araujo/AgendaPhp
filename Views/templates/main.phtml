@@ -25,26 +25,42 @@
                     </a>
                 </div>
                 <ul class="nav navbar-nav" s id="home-link">
-                    <li><a href="/agendaPhp/contacts">Contatos</a></li>
-                    <li><a href="/agendaPhp/groups">Grupos</a></li>
-                    <li><a href="/agendaPhp/events">Eventos</a></li>
+                <?php if(isset($_SESSION['id'])){
+
+                    echo '<li><a href="/agendaPhp/contacts">Contatos</a></li>';
+                    echo '<li><a href="/agendaPhp/groups">Grupos</a></li>';
+                    echo '<li><a href="/agendaPhp/events">Eventos</a></li>';
+
+                }?>
+
                 </ul>
                 <ul class="nav navbar-nav navbar-right" id="nav-right">
 
                     <li class="config-bttn">
+                    <?php if(isset($_SESSION['id'])){
 
-                        <a href="" class="dropdown-toggle" id="nav-bttn" data-toggle="dropdown">
-                            <span class="glyphicon glyphicon-user"></span>
-                        </a>
+
+                       echo  '<a href="" class="dropdown-toggle" id="nav-bttn" data-toggle="dropdown">';
+                         echo   '<span class="glyphicon glyphicon-user"></span>';
+                        echo '</a>';
+                    }?>
+
+                        
 
                         <ul class="dropdown-menu" style="padding: 10px;">
+                        
                             <li><a href="/agendaPhp/editUser"><span class="glyphicon glyphicon-cog" style="margin-bottom: 10px;"></span>
                                     Configurações</a></li>
-                            <li><a href="/users/logout"><span class="glyphicon glyphicon-log-out"></span> Sair</a></li>
+                            <li><a href="/agendaPhp/logout"><span class="glyphicon glyphicon-log-out"></span> Sair</a></li>
                         </ul>
+
                     </li>
-                    <li><a href="/agendaPhp/login"></span> Login</a></li>
-                    <li><a href="/agendaPhp/register"></span> Register</a></li>
+                    <?php if(!isset($_SESSION['id'])){
+
+                        echo '<li><a href="/agendaPhp/login"></span> Login</a></li>';
+                        echo '<li><a href="/agendaPhp/register"></span> Register</a></li>';
+                    }?>
+
                 </ul>
             </div>
         </nav>

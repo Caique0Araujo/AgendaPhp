@@ -115,7 +115,7 @@ class DaoContact
                 $fone = $contact->getFone();
             }
             $email = null;
-            if($contact->getEmail != null){
+            if($contact->getEmail() != null){
                 $fone = $contact->getEmail();
             }
 

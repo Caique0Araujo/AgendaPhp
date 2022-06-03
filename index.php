@@ -2,6 +2,7 @@
 
 namespace Agenda;
 
+
 use Agenda\Controllers\ControllerContact;
 use Agenda\Controllers\ControllerEvent;
 use Agenda\Controllers\ControllerGroup;
@@ -20,22 +21,22 @@ require_once './vendor/autoload.php';
 
 $app = AppFactory::create();
 
-$auth = function ($request, $response) {
+$auth = function ($request, $handler) {
     $auth = new AuthSession();
     $auth->verifySession();
     $auth->verifyUser();
-    return $response;
+    return $handler->handle($request);
 };
 
 
 // MAIN ROUTES
 
-$app->any('/agendaPhp/home', function (Request $request, Response $response) {
+$app->get('/agendaPhp/home', function (Request $request, Response $response) {
     $controller = new HomeView();
     $controller->render();
     return $response;
-});
-//->add($auth);
+})
+->add($auth);
 
 // USERS ROUTES
 
@@ -66,11 +67,18 @@ $app->post('/agendaPhp/login', function (Request $request, Response $response) {
     return $response;
 });
 
+$app->get('/agendaPhp/logout', function (Request $request, Response $response){
+    $controller = new ControllerUser();
+    $controller->logout();
+});
+
 $app->get('/agendaPhp/editUser', function (Request $request, Response $response) {
     $controller = new ControllerUser();
     $controller->update();
     return $response;
-});
+})
+->add($auth);
+
 
 
 
@@ -82,14 +90,15 @@ $app->any('/agendaPhp/contacts', function (Request $request, Response $response,
     $controller = new ControllerContact();
     $controller->indexAll();
     return $response;
-});
-//->add($auth);
+})
+->add($auth);
 
 $app->get('/agendaPhp/addContact', function (Request $request, Response $response,) {
     $controller = new ControllerContact();
     $controller->store();
     return $response;
-});
+})
+->add($auth);
 
 $app->post('/agendaPhp/addContact', function (Request $request, Response $response) {
     $name = $_POST['name'];
@@ -98,7 +107,8 @@ $app->post('/agendaPhp/addContact', function (Request $request, Response $respon
 
     $controller = new ControllerContact();
     $controller->storeSave($name, $fone, $email);
-});
+})
+->add($auth);
 
 $app->get('/agendaPhp/editContact/{id}', function (Request $request, Response $response, $args) {
     $route = $request->getAttribute('route');
@@ -106,7 +116,9 @@ $app->get('/agendaPhp/editContact/{id}', function (Request $request, Response $r
     $controller = new ControllerContact();
     $controller->update($id);
     return $response;
-});
+})
+->add($auth);
+
 
 $app->put('/agendaPhp/editContact', function (Request $request, Response $response,) {
     $id = $_POST['id'];
@@ -117,7 +129,9 @@ $app->put('/agendaPhp/editContact', function (Request $request, Response $respon
     $controller = new ControllerContact();
     $controller->updateSave($id, $name, $fone, $email);
     return $response;
-});
+})
+->add($auth);
+
 
 $app->delete('/agendaPhp/deleteContact/{id}', function (Request $request, Response $response, $args) {
     $route = $request->getAttribute('route');
@@ -125,7 +139,9 @@ $app->delete('/agendaPhp/deleteContact/{id}', function (Request $request, Respon
     $controller = new ControllerContact();
     $controller->delete($id);
     return $response;
-});
+})
+->add($auth);
+
 
 
 // EVENTS ROUTES
@@ -134,26 +150,37 @@ $app->any('/agendaPhp/events', function (Request $request, Response $response,) 
     $controller = new ControllerEvent();
     $controller->indexAll();
     return $response;
-});
+})
+->add($auth);
+
 
 $app->get('/agendaPhp/addEvent', function (Request $request, Response $response,) {
 
     $controller = new ControllerEvent();
     $controller->store();
     return $response;
-});
+})
+->add($auth);
+
 
 $app->post('/agendaPhp/addEvent', function (Request $request, Response $response,) {
-});
+})
+->add($auth);
 
 $app->get('/agendaPhp/editEvent/{id}', function (Request $request, Response $response, $args) {
-});
+})
+->add($auth);
+
 
 $app->put('/agendaPhp/editEvent', function (Request $request, Response $response,) {
-});
+})
+->add($auth);
+
 
 $app->delete('/agendaPhp/deleteEvent', function (Request $request, Response $response,) {
-});
+})
+->add($auth);
+
 
 // GROUPS ROUTES
 
@@ -161,7 +188,9 @@ $app->any('/agendaPhp/groups', function (Request $request, Response $response,) 
     $controller = new ControllerGroup();
     $controller->indexAll();
     return $response;
-});
+})
+->add($auth);
+
 
 $app->get('/agendaPhp/addGroups', function (Request $request, Response $response,) {
 
@@ -169,36 +198,48 @@ $app->get('/agendaPhp/addGroups', function (Request $request, Response $response
     $controller = new ControllerGroup();
     $controller->store();
     return $response;
-});
+})
+->add($auth);
+
 
 $app->post('/agendaPhp/addGroups', function (Request $request, Response $response,) {
-});
+})
+->add($auth);
+
 
 $app->get('/agendaPhp/editGroups', function (Request $request, Response $response,) {
-});
+})
+->add($auth);
 
 $app->put('/agendaPhp/editGroups', function (Request $request, Response $response,) {
-});
+})
+->add($auth);
 
 $app->delete('/agendaPhp/deleteGroups', function (Request $request, Response $response,) {
-});
+})
+->add($auth);
+
 
 // ContactEvents
 
 $app->get('/agendaPhp/addContactEvent', function (Request $request, Response $response,) {
-});
+})
+->add($auth);
 
 $app->get('/agendaPhp/removeContactEvent', function (Request $request, Response $response,) {
-});
+})
+->add($auth);
 
 
 // ContactGroups
 
 $app->get('/agendaPhp/addContactGroup', function (Request $request, Response $response,) {
-});
+})
+->add($auth);
 
 $app->get('/agendaPhp/removeContactGroup', function (Request $request, Response $response,) {
-});
+})
+->add($auth);
 
 
 $app->run();

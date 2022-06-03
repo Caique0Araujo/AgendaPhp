@@ -17,7 +17,8 @@ class AuthSession
     public function verifyUser()
     {
         $dao = new DaoUser();
-        $user =  $dao->getById($_SESSION['id']);
+        $id = $_SESSION['id'];
+        $user =  $dao->getById($id);
         if (!isset($user)) {
             header('Location: /agendaPhp/login');
             exit;

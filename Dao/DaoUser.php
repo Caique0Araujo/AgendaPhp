@@ -72,7 +72,7 @@ class DaoUser
             $pst->bindValue(1, $id);
             $pst->execute();
             
-            $pst->setFetchMode(PDO::FETCH_CLASS, "User");
+            $pst->setFetchMode(PDO::FETCH_CLASS, "Agenda\Models\User");
             $user = $pst->fetch();
             return $user;
         } catch (PDOException $e) {

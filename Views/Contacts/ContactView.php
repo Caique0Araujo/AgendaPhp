@@ -2,6 +2,8 @@
 
 namespace Agenda\Views\Contacts;
 
+use Agenda\Dao\DaoContact;
+
 class ContactView
 {
     public function __construct()
@@ -24,9 +26,10 @@ class ContactView
         $content = file_get_contents('./views/Contacts/editContact.html');
         require_once './Views/templates/main.phtml';
     }
-    public function dataContainer(){
+    public function dataContainer($c){
+        $contacts = $c;
         $title = 'Contatos';
-        $content = file_get_contents('./views/Contacts/Contacts.html');
+        $content = file_get_contents('./views/Contacts/Contacts.phtml');
         require_once './Views/templates/main.phtml';
     }
 }

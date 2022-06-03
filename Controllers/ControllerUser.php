@@ -106,4 +106,12 @@ class ControllerUser
     public function delete()
     {
     }
+
+    public function logout(){
+        session_start();
+        unset($_SESSION['id']);
+        $view = new UserView();
+        $view->login();
+        
+    }
 }
