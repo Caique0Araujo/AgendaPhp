@@ -23,13 +23,10 @@ class ContactView
     }
     public function editForm($contact){
         $title = 'Editar contato';
-        $content = file_get_contents('./views/Contacts/editContact.html');
-        require_once './Views/templates/main.phtml';
+        require_once './views/Contacts/editContact.phtml';
     }
-    public function dataContainer($c){
-        $contacts = $c;
+    public function dataContainer($contacts){
         $title = 'Contatos';
-        $content = file_get_contents('./views/Contacts/Contacts.phtml');
-        require_once './Views/templates/main.phtml';
+        require_once './views/Contacts/Contacts.phtml';
     }
 }

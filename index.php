@@ -50,7 +50,7 @@ $app->post('/agendaPhp/register', function (Request $request, Response $response
     $controller = new ControllerUser();
     $data = $request->getParsedBody();
     $controller->register($data);
-    return $response;
+    return $response->withHeader('Location', 'http://localhost/agendaPhp/login')->withStatus(302);
 });
 
 $app->get('/agendaPhp/login', function (Request $request, Response $response) {
@@ -63,13 +63,16 @@ $app->post('/agendaPhp/login', function (Request $request, Response $response) {
     $controller = new ControllerUser();
     $data = $request->getParsedBody();
 
-    $controller->login($data);
-    return $response;
+    if($controller->login($data)){
+        return $response->withHeader('Location', 'http://localhost/agendaPhp/home')->withStatus(302);
+    }
+    return $response->withHeader('Location', 'http://localhost/agendaPhp/login')->withStatus(302);
 });
 
 $app->get('/agendaPhp/logout', function (Request $request, Response $response){
     $controller = new ControllerUser();
     $controller->logout();
+    return $response->withHeader('Location', 'http://localhost/agendaPhp/login')->withStatus(302);
 });
 
 $app->get('/agendaPhp/editUser', function (Request $request, Response $response) {
@@ -86,7 +89,7 @@ $app->get('/agendaPhp/editUser', function (Request $request, Response $response)
 // CONTACT ROUTES
 
 
-$app->any('/agendaPhp/contacts', function (Request $request, Response $response,) {
+$app->get('/agendaPhp/contacts', function (Request $request, Response $response,) {
     $controller = new ControllerContact();
     $controller->indexAll();
     return $response;
@@ -107,20 +110,22 @@ $app->post('/agendaPhp/addContact', function (Request $request, Response $respon
 
     $controller = new ControllerContact();
     $controller->storeSave($name, $fone, $email);
+    return $response->withHeader('Location', 'http://localhost/agendaPhp/contacts')->withStatus(302);
+    
+
 })
 ->add($auth);
 
-$app->get('/agendaPhp/editContact/{id}', function (Request $request, Response $response, $args) {
-    $route = $request->getAttribute('route');
-    $id = $route->getArgument('id');
+$app->get('/agendaPhp/editContact/{id}', function (Request $request, Response $response, $id) {
     $controller = new ControllerContact();
-    $controller->update($id);
+    $controller->update($id['id']);
     return $response;
 })
 ->add($auth);
 
 
-$app->put('/agendaPhp/editContact', function (Request $request, Response $response,) {
+$app->any('/agendaPhp/editContact', function (Request $request, Response $response,) {
+    
     $id = $_POST['id'];
     $name = $_POST['name'];
     $fone = $_POST['fone'];
@@ -128,17 +133,18 @@ $app->put('/agendaPhp/editContact', function (Request $request, Response $respon
 
     $controller = new ControllerContact();
     $controller->updateSave($id, $name, $fone, $email);
-    return $response;
+    return $response->withHeader('Location', 'http://localhost/agendaPhp/contacts')->withStatus(302);
+
 })
 ->add($auth);
 
 
-$app->delete('/agendaPhp/deleteContact/{id}', function (Request $request, Response $response, $args) {
-    $route = $request->getAttribute('route');
-    $id = $route->getArgument('id');
+$app->any('/agendaPhp/deleteContact', function (Request $request, Response $response, $args) {
+    $id = $_POST['id'];
     $controller = new ControllerContact();
     $controller->delete($id);
-    return $response;
+    return $response->withHeader('Location', 'http://localhost/agendaPhp/contacts')->withStatus(302);
+
 })
 ->add($auth);
 
@@ -162,22 +168,49 @@ $app->get('/agendaPhp/addEvent', function (Request $request, Response $response,
 })
 ->add($auth);
 
-
 $app->post('/agendaPhp/addEvent', function (Request $request, Response $response,) {
+
+    $name = $_POST['name'];
+    $description = $_POST['description'];
+    $date = $_POST['date'];
+
+    $controller = new ControllerEvent();
+    $controller->storeSave($name, $description, $date);
+    return $response->withHeader('Location', 'http://localhost/agendaPhp/events')->withStatus(302);
+
 })
 ->add($auth);
 
-$app->get('/agendaPhp/editEvent/{id}', function (Request $request, Response $response, $args) {
+
+$app->get('/agendaPhp/editEvent/{id}', function (Request $request, Response $response, $id) {
+    $controller = new ControllerEvent();
+    $controller->update($id['id']);
+    return $response;
 })
 ->add($auth);
 
 
-$app->put('/agendaPhp/editEvent', function (Request $request, Response $response,) {
+$app->any('/agendaPhp/editEvent', function (Request $request, Response $response,) {
+
+    $id = $_POST['id'];
+    $name = $_POST['name'];
+    $description = $_POST['description'];
+    $date = $_POST['date'];
+
+    $controller = new ControllerEvent();
+    $controller->updateSave($id, $name, $description, $date);
+    return $response->withHeader('Location', 'http://localhost/agendaPhp/events')->withStatus(302);
+
+
 })
 ->add($auth);
 
 
-$app->delete('/agendaPhp/deleteEvent', function (Request $request, Response $response,) {
+$app->any('/agendaPhp/deleteEvent', function (Request $request, Response $response,) {
+    $id = $_POST['id'];
+    $controller = new ControllerEvent();
+    $controller->delete($id);
+    return $response->withHeader('Location', 'http://localhost/agendaPhp/events')->withStatus(302);
 })
 ->add($auth);
 

@@ -8,7 +8,7 @@ use Agenda\Models\Event;
 use PDOException;
 
 
-class DaoEvents
+class DaoEvent
 {
 
     public function getAll($User_id)
@@ -16,7 +16,7 @@ class DaoEvents
 
         try {
             $sql =
-                'SELECT events.name, events.description, events.date
+                'SELECT events.id, events.name, events.description, events.date, events.active, events.Users_id
         FROM events
         WHERE Users_id = ?
         AND active = 1';
@@ -38,16 +38,16 @@ class DaoEvents
 
         try {
             $sql =
-                'SELECT events.name, events.description, events.date
-        FROM eventos 
-        WHERE id = ?
-        AND active = 1';
+            'SELECT events.id, events.name, events.date, events.description, events.active, events.Users_id
+            FROM events 
+            WHERE id = ?
+            AND active = 1';
             $pst = Connection::getPreparedStatement($sql);
 
             $pst->bindValue(1, $id);
             $pst->execute();
 
-            $pst->setFetchMode(PDO::FETCH_CLASS, 'Evento');
+            $pst->setFetchMode(PDO::FETCH_CLASS, 'Agenda\Models\Event');
             $evento = new Event();
             $evento = $pst->fetch();
             return $evento;
@@ -92,17 +92,19 @@ class DaoEvents
         }
     }
 
-    public function delete($id)
+    public function delete($id, $User_id)
     {
 
         try {
             $sql =
-                'UPDATE events
-        SET active = 0
-        where id = ?';
+            'UPDATE events 
+            SET active = 0
+            WHERE id = ?
+            AND Users_id = ?';
             $pst = Connection::getPreparedStatement($sql);
 
             $pst->bindValue(1, $id);
+            $pst->bindValue(2, $User_id);
 
             if ($pst->execute()) {
                 return true;
@@ -119,15 +121,19 @@ class DaoEvents
 
         try {
             $sql =
-                'UPDATE events 
-        SET name = ?, date = ?, description = ? 
-        WHERE id = ?';
+            'UPDATE events 
+            SET events.name = ?, events.date = ?, events.description = ? 
+            WHERE events.id = ?
+            AND events.Users_id = ?';
+
             $pst = Connection::getPreparedStatement($sql);
 
             $pst->bindValue(1, $event->getName());
             $pst->bindValue(2, $event->getDate());
             $pst->bindValue(3, $event->getDescription());
             $pst->bindValue(4, $event->getId());
+            $pst->bindValue(5, $event->getUser_id());
+
 
             if ($pst->execute()) {
                 return true;

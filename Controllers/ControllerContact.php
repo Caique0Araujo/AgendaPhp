@@ -33,7 +33,6 @@ class ControllerContact
     }
     public function storeSave($name, $fone, $email)
     {
-
         $con = new Contact();
         $con->setName($name);
         $con->setFone($fone);
@@ -43,12 +42,6 @@ class ControllerContact
         $dao = new DaoContact();
         $dao->create($con);
 
-
-        $view = new ContactView();
-        $contacts = [];
-        $dao = new DaoContact();
-        $contacts = $dao->getAll($_SESSION['id']);
-        $view->dataContainer($contacts);
     }
     public function update($id)
     {
@@ -58,6 +51,7 @@ class ControllerContact
         $view->editForm($contact);
     }
     public function updateSave($id, $name, $fone, $email){
+
         $con = new Contact();
 
         $con->setId($id);
@@ -68,11 +62,6 @@ class ControllerContact
 
         $dao = new DaoContact();
         $dao->update($con);
-        $view = new ContactView();
-        $contacts = [];
-        $dao = new DaoContact();
-        $contacts = $dao->getAll($_SESSION['id']);
-        $view->dataContainer($contacts);
 
     }
 
@@ -80,10 +69,5 @@ class ControllerContact
     {
         $dao = new DaoContact();
         $dao->delete($id, $_SESSION['id']);
-        $view = new ContactView();
-        $contacts = [];
-        $dao = new DaoContact();
-        $contacts = $dao->getAll($_SESSION['id']);
-        $view->dataContainer($contacts);
     }
 }

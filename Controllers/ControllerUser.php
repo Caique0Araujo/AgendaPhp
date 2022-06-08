@@ -43,12 +43,12 @@ class ControllerUser
 
         if(!isset($login)){
             echo 'Insira login ou email!';
-            return;
+            return false;
         }
 
         if(empty($data['password'])){
             echo 'Insira senha!';
-            return;
+            return false;
         }
 
         $password = $data['password'];
@@ -57,12 +57,11 @@ class ControllerUser
 
         if(!$dao->authLogin($login, $password)){
             echo 'Credenciais inválidas!';
-            return;
+            return false;
         }
 
         if($dao->login($login)){
-            $view = new HomeView();
-            $view->render();
+            return true;
         }
 
 
@@ -110,8 +109,5 @@ class ControllerUser
     public function logout(){
         session_start();
         unset($_SESSION['id']);
-        $view = new UserView();
-        $view->login();
-        
     }
 }

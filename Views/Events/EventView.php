@@ -15,17 +15,15 @@ class EventView
     }
     public function addForm(){
         $title = 'Adicionar Evento';
-        $content = file_get_contents('./views/Eventos/addEvent.html');
+        $content = file_get_contents('./views/Events/addEvent.html');
         require_once './Views/templates/main.phtml';
     }
-    public function editForm(){
+    public function editForm($event){
         $title = 'Editar Evento';
-        $content = file_get_contents('./views/Eventos/editEvent.html');
-        require_once './Views/templates/main.phtml';
+        require_once './views/Events/editEvent.phtml';
     }
-    public function dataContainer(){
+    public function dataContainer($events){
         $title = 'Eventos';
-        $content = file_get_contents('./views/Events/Events.html');
-        require_once './Views/templates/main.phtml';
+        require_once './views/Events/Events.phtml';
     }
 }

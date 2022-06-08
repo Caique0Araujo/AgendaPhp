@@ -82,7 +82,7 @@ class DaoContact
     {
         try {
             $sql = 
-            'SELECT contacts.name, contacts.email, contacts.fone
+            'SELECT contacts.id, contacts.name, contacts.email, contacts.fone, contacts.active, contacts.Users_id
             FROM contacts 
             WHERE id = ? 
             AND active = 1';
@@ -91,7 +91,7 @@ class DaoContact
             $pst->bindValue(1, $id);
             $pst->execute();
 
-            $pst->setFetchMode(PDO::FETCH_CLASS, 'Contact');
+            $pst->setFetchMode(PDO::FETCH_CLASS, 'Agenda\Models\Contact');
             $contact = new Contact();
             $contact = $pst->fetch();
             return $contact;
@@ -116,12 +116,12 @@ class DaoContact
             }
             $email = null;
             if($contact->getEmail() != null){
-                $fone = $contact->getEmail();
+                $email = $contact->getEmail();
             }
 
             $pst->bindValue(1, $contact->getName());
-            $pst->bindValue(2, $fone);
-            $pst->bindValue(3, $email);
+            $pst->bindValue(2, $email);
+            $pst->bindValue(3, $fone);
             $pst->bindValue(4, $contact->getUser_id());
 
             if ($pst->execute()) {
@@ -139,10 +139,10 @@ class DaoContact
 
         try {
             $sql =
-                'UPDATE contacts 
-        SET active = 0
-        WHERE id = ?
-        AND Users_id = ?';
+            'UPDATE contacts 
+            SET active = 0
+            WHERE id = ?
+            AND Users_id = ?';
             $pst = Connection::getPreparedStatement($sql);
 
             $pst->bindValue(1, $id);
@@ -160,13 +160,12 @@ class DaoContact
 
     public function update(Contact $c)
     {
-
         try {
             $sql =
-                'UPDATE contacts 
-        SET name = ?, fone = ?, email = ? 
-        WHERE id = ?
-        AND Users_id = ?';
+            'UPDATE contacts 
+            SET contacts.name = ?, contacts.fone = ?, contacts.email = ? 
+            WHERE contacts.id = ?
+            AND contacts.Users_id = ?';
             $pst = Connection::getPreparedStatement($sql);
 
             $pst->bindValue(1, $c->getName());
