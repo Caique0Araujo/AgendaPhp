@@ -225,8 +225,7 @@ $app->any('/agendaPhp/groups', function (Request $request, Response $response,) 
 ->add($auth);
 
 
-$app->get('/agendaPhp/addGroups', function (Request $request, Response $response,) {
-
+$app->get('/agendaPhp/addGroup', function (Request $request, Response $response,) {
 
     $controller = new ControllerGroup();
     $controller->store();
@@ -235,20 +234,45 @@ $app->get('/agendaPhp/addGroups', function (Request $request, Response $response
 ->add($auth);
 
 
-$app->post('/agendaPhp/addGroups', function (Request $request, Response $response,) {
+$app->post('/agendaPhp/addGroup', function (Request $request, Response $response,) {
+   
+    $name = $_POST['name'];
+    $description = $_POST['description'];
+    $controller = new ControllerGroup();
+    $controller->storeSave($name, $description);
+    return $response->withHeader('Location', 'http://localhost/agendaPhp/groups')->withStatus(302);
+
 })
 ->add($auth);
 
 
-$app->get('/agendaPhp/editGroups', function (Request $request, Response $response,) {
+$app->get('/agendaPhp/editGroup/{id}', function (Request $request, Response $response, $id) {
+
+    $controller = new ControllerGroup();
+    $controller->update($id['id']);
+    return $response;
 })
 ->add($auth);
 
-$app->put('/agendaPhp/editGroups', function (Request $request, Response $response,) {
+$app->any('/agendaPhp/editGroup', function (Request $request, Response $response,) {
+
+    $id = $_POST['id'];
+    $name = $_POST['name'];
+    $description = $_POST['description'];
+
+    $controller = new ControllerGroup();
+    $controller->updateSave($id, $name, $description);
+    return $response->withHeader('Location', 'http://localhost/agendaPhp/groups')->withStatus(302);
+
 })
 ->add($auth);
 
-$app->delete('/agendaPhp/deleteGroups', function (Request $request, Response $response,) {
+$app->any('/agendaPhp/deleteGroup', function (Request $request, Response $response,) {
+   
+    $id = $_POST['id'];
+    $controller = new ControllerGroup();
+    $controller->delete($id);
+    return $response->withHeader('Location', 'http://localhost/agendaPhp/groups')->withStatus(302);
 })
 ->add($auth);
 

@@ -18,14 +18,12 @@ class GroupView
         $content = file_get_contents('./views/Groups/addGroup.html');
         require_once './Views/templates/main.phtml';
     }
-    public function editForm(){
+    public function editForm($group){
         $title = 'Editar Grupo';
-        $content = file_get_contents('./views/Groups/editGroups.html');
-        require_once './Views/templates/main.phtml';
+        require_once './Views/Groups/editGroup.phtml';
     }
-    public function dataContainer(){
-        $title = 'Grupo';
-        $content = file_get_contents('./views/Groups/Groups.html');
-        require_once './Views/templates/main.phtml';
+    public function dataContainer($groups){
+        $title = 'Grupos';
+        require_once './Views/Groups/Groups.phtml';
     }
 }

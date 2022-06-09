@@ -1,0 +1,345 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><?=$title?></title>
+    <link rel="shortcut icon" href="/img/favicon.svg" type="image/x-icon">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="https://kit.fontawesome.com/416685e231.js" crossorigin="anonymous"></script>
+  </head>
+  <body>
+    <div class="container-father">
+      <nav class="navbar navbar-inverse" id="menu">
+        <div class="container-fluid" id="nav-container">
+          <div class="navbar-header" id="nav-header">
+            <a class="navbar-brand" href="/agendaPhp/home" id="main-link">
+              <span class="glyphicon glyphicon-earphone" style=" margin-right: 0.4em;"></span>
+              Agenda
+            </a>
+          </div>
+          <ul class="nav navbar-nav" s id="home-link">
+            <?php if (isset($_SESSION['id'])) {
+
+              echo '<li><a href="/agendaPhp/contacts">Contatos</a></li>';
+              echo '<li><a href="/agendaPhp/groups">Grupos</a></li>';
+              echo '<li><a href="/agendaPhp/events">Eventos</a></li>';
+            } ?>
+
+          </ul>
+          <ul class="nav navbar-nav navbar-right" id="nav-right">
+
+            <li class="config-bttn">
+              <?php if (isset($_SESSION['id'])) {
+
+                echo  '<a href="" class="dropdown-toggle" id="nav-bttn" data-toggle="dropdown">';
+                echo   '<span class="glyphicon glyphicon-user"></span>';
+                echo '</a>';
+              } ?>
+              <ul class="dropdown-menu" style="padding: 10px;">
+                <li><a href="/agendaPhp/editUser"><span class="glyphicon glyphicon-cog" style="margin-bottom: 10px;"></span>
+                    Configurações</a></li>
+                <li><a href="/agendaPhp/logout"><span class="glyphicon glyphicon-log-out"></span> Sair</a></li>
+              </ul>
+            </li>
+            <?php if (!isset($_SESSION['id'])) {
+              echo '<li><a href="/agendaPhp/login"></span> Login</a></li>';
+              echo '<li><a href="/agendaPhp/register"></span> Register</a></li>';
+            } ?>
+          </ul>
+        </div>
+      </nav>
+      <div style="padding: 5em">
+        <div class="container">
+          <h1 class="container-title"><?=$title?></h1>
+          <form action="/agendaPhp/editGroup" method="post" class="form-add">
+            <input type="hidden" name="id" id="id" value="<?=$group->getId()?>" />
+            <div class="container-fields">
+              <label for="name">Nome*: </label>
+              <input
+                class="textfields"
+                type="text"
+                id="name"
+                name="name"
+                required
+                value="<?=$group->getName()?>"
+              />
+            </div>
+            <div class="container-fields">
+              <label for="description">Descrição: </label>
+              <input
+                class="textfields"
+                type="text"
+                id="description"
+                name="description"
+                value="<?=$group->getDescription()?>"
+              />
+            </div>
+            <div class="container-bttns">
+              <input class="bttn-submit" type="submit" value="Confirmar" />
+            </div>
+          </form>
+        </div>
+        </div>
+    </div>
+    <footer>
+      <p><span>Agenda</span> &copy; 2022
+      <p style="margin-left: 2px;">By <a rel="author" target="_blank" href="https://www.linkedin.com/in/caique-araújo-0053201b0/" id="linkedin-link">Caique Araújo</a></p>
+      </p>
+    </footer>
+  </body>
+  <style>
+  * {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+    padding: 0;
+    margin: 0;
+  }
+
+  body {
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    overflow: auto;
+
+  }
+
+  .container-father {
+    padding: 0;
+    padding-bottom: 5em;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    display: block;
+    overflow-y: scroll;
+    flex-direction: column;
+  }
+
+
+  #nav-container {
+    width: 100vw;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  #nav-container #nav-header {
+    margin-left: 0;
+    margin-right: auto;
+  }
+
+  #nav-container #nav-right {
+    margin-right: 0;
+    margin-left: auto;
+  }
+
+  #menu {
+    background-color: #13293d;
+    border-radius: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    display: flex;
+    justify-content: space-between;
+    width: 100vw;
+  }
+
+
+
+  a {
+    text-decoration: none;
+    color: rgb(60, 60, 60);
+  }
+
+
+  a:visited {
+    color: black;
+  }
+
+
+  a:hover {
+    color: rgb(112, 112, 112);
+    text-decoration: none;
+  }
+
+  #nav-container {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  #dropdown-bttn:hover {
+    color: white;
+  }
+
+
+  #nav-header {
+    padding-left: 1em;
+    position: left;
+    right: 0;
+  }
+
+  #main-link {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #9d9d9d;
+  }
+
+  #main-link:hover {
+    color: white;
+  }
+
+  #name-link {
+    font-size: large;
+    font-weight: 600;
+    color: black;
+  }
+
+  #name-link:hover {
+    color: rgb(110, 110, 110);
+  }
+
+  #nav-bttn p {
+    padding: 0;
+    margin: auto 0.8em;
+  }
+
+  #linkedin-link {
+    color: #7c7c7c;
+    text-decoration: none;
+  }
+
+  #linkedin-link:hover {
+    color: #ffffff;
+    font-weight: 500;
+  }
+
+
+
+  footer {
+
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 5em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-top: 1px solid #8a8a8a;
+    background-color: #13293d;
+  }
+
+  footer p {
+    color: #7c7c7c;
+  }
+
+  footer span {
+    font-weight: bold;
+    color: rgb(212, 212, 212);
+  }
+
+  .container {
+    padding: 10px;
+    margin-top: 5em;
+    min-width: 400px;
+    min-height: 300px;
+    max-width: fit-content;
+    box-shadow: 0px 3px 10px 0px rgba(0, 0, 0, 0.23);
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(255, 255, 255);
+  }
+
+  .contacts,
+  .container #bttn-contact {
+    display: flex;
+    align-items: center;
+    margin: auto;
+    min-width: 10em;
+    justify-content: center;
+  }
+
+  .container {
+    background-color: rgba(237, 237, 237, 0.4);
+    backdrop-filter: blur(7px);
+  }
+
+  .container .container-title {
+    margin-top: 0x;
+    margin-bottom: 15px;
+    color: #091420;
+  }
+
+  .container form {
+    padding: 1em;
+    margin: 1em;
+  }
+
+  form .container-fields {
+    margin-bottom: 15px;
+    align-items: center;
+  }
+
+  .container-bttns {
+    padding: 0.5em;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+  }
+
+  .container-bttns .bttn-submit,
+  #delete-user {
+    margin-top: 1em;
+    width: 40%;
+  }
+
+  .container-fields .textfields {
+    width: 100%;
+  }
+
+  input {
+    border: 0;
+  }
+
+  .textfields {
+    background-color: transparent;
+    color: black;
+    border: 1px solid transparent;
+    border-bottom: 1px solid black;
+
+    padding: 5px;
+  }
+
+  .textfields:hover,
+  .textfields:focus {
+    background-color: transparent;
+    color: black;
+  }
+
+  input:-webkit-autofill,
+  input:-webkit-autofill:focus {
+    transition: background-color 600000s 0s, color 600000s 0s;
+  }
+
+  .bttn-submit {
+    background-color: #091420;
+    color: white;
+    border: 1px solid transparent;
+    padding: 5px;
+    border-radius: 5px;
+  }
+
+  .bttn-submit:hover {
+    background-color: white;
+    color: #091420;
+    border: 1px solid #091420;
+  }
+</style>
+</html>

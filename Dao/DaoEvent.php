@@ -61,9 +61,9 @@ class DaoEvent
 
         try {
             $sql =
-                'INSERT 
-        INTO events (name, date, description, Users_id) 
-        VALUES (?, ?, ?, ?)';
+            'INSERT 
+            INTO events (name, date, description, Users_id) 
+            VALUES (?, ?, ?, ?)';
 
             $description = null;
             if ($event->getDescription() != null) {

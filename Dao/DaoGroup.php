@@ -15,10 +15,10 @@ class DaoGroup
 
         try {
             $sql =
-                "SELECT groups.id, groups.name, groups.description
-        FROM groups 
-        WHERE Users_id = ? 
-        AND = active = 1";
+            "SELECT groups.id, groups.name, groups.description, groups.active, groups.Users_id
+            FROM groups 
+            WHERE Users_id = ? 
+            AND active = 1";
 
             $pst = Connection::getPreparedStatement($sql);
             $pst->bindValue(1, $User_id);
@@ -35,11 +35,11 @@ class DaoGroup
     {
         try {
             $sql =
-                'SELECT groups.name, groups.description
-        FROM groups 
-        WHERE id = ? 
-        AND Users_id = ?
-        AND groups.active = 1';
+            'SELECT groups.id, groups.name, groups.description, groups.active, groups.Users_id
+            FROM groups 
+            WHERE id = ? 
+            AND Users_id = ?
+            AND groups.active = 1';
 
             $pst = Connection::getPreparedStatement($sql);
 
@@ -48,7 +48,7 @@ class DaoGroup
 
             $pst->execute();
 
-            $pst->setFetchMode(PDO::FETCH_CLASS, 'Grupo');
+            $pst->setFetchMode(PDO::FETCH_CLASS, 'Agenda\Models\Group');
             $grupo = new Group();
             $grupo = $pst->fetch();
             return $grupo;
@@ -62,9 +62,9 @@ class DaoGroup
 
         try {
             $sql =
-                'INSERT 
-        INTO groups (name, description, Users_id) 
-        values (?, ?, ?)';
+            'INSERT 
+            INTO groups (name, description, Users_id) 
+            values (?, ?, ?)';
             $pst = Connection::getPreparedStatement($sql);
 
             $pst->bindValue(1, $group->getName());
@@ -86,10 +86,10 @@ class DaoGroup
 
         try {
             $sql =
-                'UPDATE groups
-        SET active = 0 
-        WHERE id = ? 
-        AND Users_id = ?';
+            'UPDATE groups
+            SET active = 0 
+            WHERE id = ? 
+            AND Users_id = ?';
             $pst = Connection::getPreparedStatement($sql);
 
             $pst->bindValue(1, $id);
@@ -110,9 +110,9 @@ class DaoGroup
 
         try {
             $sql =
-                'UPDATE groups 
-        SET name = ?, description = ? 
-        WHERE id = ?';
+            'UPDATE groups 
+            SET groups.name = ?, groups.description = ? 
+            WHERE groups.id = ?';
             $pst = Connection::getPreparedStatement($sql);
 
             $pst->bindValue(1, $group->getName());
