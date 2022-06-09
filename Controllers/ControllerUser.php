@@ -5,6 +5,7 @@ namespace Agenda\Controllers;
 use Agenda\Models\User;
 use Agenda\Views\Users\UserView;
 use Agenda\Dao\DaoUser;
+use Agenda\Helpers\Verify;
 use Agenda\Views\HomeView;
 
 class ControllerUser
@@ -76,11 +77,26 @@ class ControllerUser
         $password = $data['password'];
         $login = $data['login'];
 
+        $verify = new Verify();
+
+        
+
         $confirmPassword = $data['confirmPassword'];
 
         if($confirmPassword != $password){
             echo 'Senhas diferentes, tente novament!';
+            return;
         }
+
+        if($verify->emailActive($email)){
+            echo 'Email já cadastrado';
+            return;
+        }
+        if($verify->loginActive($login)){
+            echo 'Login já cadastrado';
+            return;
+        }
+
 
         $user = new User();
         $user->setName($name);
@@ -88,22 +104,36 @@ class ControllerUser
         $user->setFone($fone);
         $user->setLogin($login);
         $user->setPassword(password_hash($password, PASSWORD_BCRYPT));
-
         $dao = new DaoUser();
+        $view = new UserView();
+
+
+
+        if($verify->emailDesactive($email) || $verify->loginDesactive($login)){
+            $id = $dao->getIdByLogin($login, $email);
+            $user->setId($id);
+            $dao->update($user);
+            return $view->login();
+            
+        }
+
         $dao->create($user);
         
-        $view = new UserView();
-        $view->render();
+        return $view->login();
 
     }
 
     public function update()
     {
         $view = new UserView();
-        $view->editForm();
+        $dao = new DaoUser();
+        $user = $dao->getById($_SESSION['id']);
+        $view->editForm($user);
     }
-    public function delete()
+    public function delete($id)
     {
+        $dao = new DaoUser();
+        $dao->delete($id);
     }
 
     public function logout(){

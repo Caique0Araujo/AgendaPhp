@@ -18,10 +18,9 @@ class UserView
         $content = file_get_contents('./views/Users/register.html');
         require_once './Views/templates/main.phtml';
     }
-    public function editForm(){
+    public function editForm($user){
         $title = 'Editar Usuário';
-        $content = file_get_contents('./views/Users/editUser.html');
-        require_once './Views/templates/main.phtml';
+        require_once './views/Users/editUser.phtml';
     }
     public function login(){
         $title = 'Login';

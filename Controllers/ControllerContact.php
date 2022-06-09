@@ -5,7 +5,7 @@ namespace Agenda\Controllers;
 use Agenda\Dao\DaoContact;
 use Agenda\Models\Contact;
 use Agenda\Views\Contacts\ContactView;
-
+use Agenda\Views\HomeView;
 
 class ControllerContact
 {
@@ -20,6 +20,14 @@ class ControllerContact
         $dao = new DaoContact();
         $contacts = $dao->getAll($_SESSION['id']);
         $view->dataContainer($contacts);
+    }
+    public function indexHome()
+    {
+        $view = new HomeView();
+        $contacts = [];
+        $dao = new DaoContact();
+        $contacts = $dao->getAll($_SESSION['id']);
+        $view->render($contacts);
     }
 
     public function indexOne()

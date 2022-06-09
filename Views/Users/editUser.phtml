@@ -58,27 +58,35 @@
     </nav>
     <div style="padding: 5em">
       <div class="container">
-        <h1 class="container-title"><?= $title ?></h1>
-        <form action="/agendaPhp/editContact" method="post" class="form-add">
-          <input type="hidden" name="id" id="id" value="<?= $contact->getId() ?>" />
-          <div class="container-fields">
-            <label for="nome">Nome*: </label>
-            <input class="textfields" type="text" id="name" name="name" required value="<?= $contact->getName() ?>" />
-          </div>
-          <div class="container-fields">
-            <label for="fone">Telefone*: </label>
-            <input class="textfields" type="number" id="fone" name="fone" value="<?= $contact->getFone() ?>" />
-          </div>
-          <div class="container-fields">
-            <label for="email">E-mail: </label>
-            <input class="textfields" type="email" id="email" name="email" value="<?= $contact->getEmail() ?>" />
-          </div>
-          <div class="container-bttns">
-            <input class="bttn-submit" type="submit" value="Confirmar" />
-          </div>
-        </form>
+          <h1 class="container-title">Editar perfil</h1>
+          <form action="/agendaPhp/editUserc" method="post" class="form-add">
+              <div class="container-fields">
+                  <label for="name">Nome*: </label>
+                  <input class="textfields" type="text" id="name" name="name" required value="<?=$user->getName()?>">
+              </div>
+              <div class="container-fields">
+                  <label for="login">Login*: </label>
+                  <input class="textfields" type="text" id="login" name="login" value="<?=$user->getLogin()?>">
+              </div>
+              <div class="container-fields">
+                  <label for="fone">Telefone: </label>
+                  <input class="textfields" type="number" id="fone" name="fone" required value="<?=$user->getFone()?>">
+              </div>
+              <div class="container-fields">
+                  <label for="email">E-mail*: </label>
+                  <input class="textfields" type="email" id="email" name="email" value="<?=$user->getEmail()?>">
+              </div>
+              <div class="container-fields">
+                  <label for="password">Senha*: </label>
+                  <input class="textfields" type="password" id="password" name="password" value="">
+              </div>
+              <div class="container-bttns">
+                  <input class="bttn-submit" type="submit" value="Confirmar">
+                  <a href="/agendaPhp/deleteUser" id="delete-user" onClick="return confirm('Deseja desativar a conta ?')">Desativar conta</a>
+              </div>
+          </form>
       </div>
-    </div>
+      </div>
   </div>
   <footer>
     <p><span>Agenda</span> &copy; 2022
@@ -87,4 +95,5 @@
   </footer>
 </body>
 <style><?php include './views/templates/style.css'; ?></style>
+
 </html>

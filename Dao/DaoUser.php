@@ -16,7 +16,7 @@ class DaoUser
 
         try {
             $sql =
-                "SELECT id, active 
+                "SELECT users.id, users.name, users.active 
         FROM users 
         where (users.login = ? OR users.email = ?) AND users.active = 1";
 
@@ -28,6 +28,7 @@ class DaoUser
                 $dado = $pst->fetch();
                 session_start();
                 $_SESSION['id'] = $dado['id'];
+                $_SESSION['name'] = $dado['name'];
                 return true;
             } else {
                 return false;
@@ -80,6 +81,60 @@ class DaoUser
         }
     }
 
+    
+
+    public function getByLogin($login, $active)
+    {
+
+        try {
+        $user = new User();
+
+            $sql =
+                'SELECT users.id, users.name, users.login, users.email, users.password, users.fone, users.active 
+        FROM users 
+        WHERE users.login = ? AND users.active = ?';
+
+            $pst = Connection::getPreparedStatement($sql);
+
+            $pst->bindValue(1, $login);
+            $pst->bindValue(2, $active);
+            $pst->execute();
+            
+            if ($pst->rowCount() < 1)
+                return false;
+            else
+                return true;
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
+    }
+
+    public function getByEmail($email, $active)
+    {
+
+        try {
+        $user = new User();
+
+            $sql =
+                'SELECT users.id, users.name, users.login, users.email, users.password, users.fone, users.active 
+        FROM users 
+        WHERE users.email = ? AND users.active = ?';
+
+            $pst = Connection::getPreparedStatement($sql);
+
+            $pst->bindValue(1, $email);
+            $pst->bindValue(2, $active);
+            $pst->execute();
+            
+            if ($pst->rowCount() < 1)
+                return false;
+            else
+                return true;
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
+    }
+
     public function authLogin($login, $password)
     {
 
@@ -113,7 +168,7 @@ class DaoUser
     }
 
 
-    public function getIdByLogin($login)
+    public function getIdByLogin($login, $email)
     {
 
         try {
@@ -124,7 +179,7 @@ class DaoUser
             $pst = Connection::getPreparedStatement($sql);
 
             $pst->bindValue(1, $login);
-            $pst->bindValue(2, $login);
+            $pst->bindValue(2, $email);
 
             if ($pst->execute()) {
                 $id = $pst->fetch(PDO::FETCH_COLUMN);
@@ -137,7 +192,7 @@ class DaoUser
         }
     }
 
-    public function getPasswordByLogin($login){
+    public function getPasswordByLogin($login, $email){
         try {
             $sql = 
             'SELECT users.password 
@@ -146,7 +201,7 @@ class DaoUser
 
             $pst = Connection::getPreparedStatement($sql);
             $pst->bindValue(1, $login);
-            $pst->bindValue(2, $login);
+            $pst->bindValue(2, $email);
             $pst->execute();
             $password = $pst->fetch(PDO::FETCH_COLUMN);
             return $password;
@@ -200,12 +255,13 @@ class DaoUser
 
             $sql =
                 'UPDATE users 
-            SET users.nome = ?, 
+            SET users.name = ?, 
             users.login = ?, 
             users.password = ?, 
             users.fone = ?, 
-            users.email = ?, 
-            where id = ?';
+            users.email = ?,
+            users.active = 1
+            WHERE users.id = ? ';
             $pst = Connection::getPreparedStatement($sql);
 
             $pst->bindValue(1, $user->getName());
@@ -230,12 +286,19 @@ class DaoUser
 
         try {
             $sql =
-                'UPDATE users
-        SET active = 0 
-        WHERE id = ? ';
+            'UPDATE users
+            SET active = 0 
+            WHERE id = ? ;
+            DELETE FROM contacts WHERE Users_id = ?;
+            DELETE FROM groups WHERE Users_id = ?;
+            DELETE FROM events WHERE Users_id = ?;
+            ';
             $pst = Connection::getPreparedStatement($sql);
 
             $pst->bindValue(1, $id);
+            $pst->bindValue(2, $id);
+            $pst->bindValue(3, $id);
+            $pst->bindValue(4, $id);
 
             if ($pst->execute()) {
                 return true;

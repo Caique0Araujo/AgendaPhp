@@ -9,11 +9,10 @@ class HomeView
     {
         
     }
-    public function render()
+    public function render($contacts)
     {
-        $title = 'Home';
-        $content = file_get_contents('./views/Home/home.html');
-        require_once './Views/templates/main.phtml';
+        $title = 'Início';
+        require_once './views/Home/home.phtml';
 
     }
 }

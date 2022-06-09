@@ -32,8 +32,8 @@ $auth = function ($request, $handler) {
 // MAIN ROUTES
 
 $app->get('/agendaPhp/home', function (Request $request, Response $response) {
-    $controller = new HomeView();
-    $controller->render();
+    $controller = new ControllerContact();
+    $controller->indexHome();
     return $response;
 })
 ->add($auth);
@@ -82,7 +82,29 @@ $app->get('/agendaPhp/editUser', function (Request $request, Response $response)
 })
 ->add($auth);
 
+$app->any('/agendaPhp/editUserc', function (Request $request, Response $response,) {
+    
+    $id = $_POST['id'];
+    $name = $_POST['name'];
+    $fone = $_POST['fone'];
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+    $login = $_POST['login'];
 
+    $controller = new ControllerContact();
+    $controller->updateSave($id, $name, $fone, $email);
+    return $response->withHeader('Location', 'http://localhost/agendaPhp/contacts')->withStatus(302);
+
+})
+->add($auth);
+
+$app->any('/agendaPhp/deleteUser', function (Request $request, Response $response, $args) {
+    $controller = new ControllerUser();
+    $controller->delete($_SESSION['id']);
+    return $response->withHeader('Location', 'http://localhost/agendaPhp/logout')->withStatus(302);
+
+})
+->add($auth);
 
 
 
