@@ -4,6 +4,8 @@ namespace Agenda;
 
 
 use Agenda\Controllers\ControllerContact;
+use Agenda\Controllers\ControllerContactEvent;
+use Agenda\Controllers\ControllerContactGroup;
 use Agenda\Controllers\ControllerEvent;
 use Agenda\Controllers\ControllerGroup;
 use Agenda\Controllers\ControllerUser;
@@ -55,7 +57,7 @@ $app->post('/agendaPhp/register', function (Request $request, Response $response
 
 $app->get('/agendaPhp/login', function (Request $request, Response $response) {
     $controller = new ControllerUser();
-    $controller->renderLogin();
+    $controller->renderLogin('Faça o login para continuar');
     return $response;
 });
 
@@ -91,8 +93,8 @@ $app->any('/agendaPhp/editUserc', function (Request $request, Response $response
     $password = $_POST['password'];
     $login = $_POST['login'];
 
-    $controller = new ControllerContact();
-    $controller->updateSave($id, $name, $fone, $email);
+    $controller = new ControllerUser();
+    $controller->updateSave($id, $name, $login, $fone, $email);
     return $response->withHeader('Location', 'http://localhost/agendaPhp/contacts')->withStatus(302);
 
 })
@@ -301,22 +303,48 @@ $app->any('/agendaPhp/deleteGroup', function (Request $request, Response $respon
 
 // ContactEvents
 
-$app->get('/agendaPhp/addContactEvent', function (Request $request, Response $response,) {
+$app->get('/agendaPhp/addContactEvent/{id}', function (Request $request, Response $response, $id) {
+    $controller = new ControllerContactEvent();
+    $id = $id['id'];
+    $controller->store($id);
+    return $response;
 })
 ->add($auth);
 
-$app->get('/agendaPhp/removeContactEvent', function (Request $request, Response $response,) {
+$app->get('/agendaPhp/removeContactEvent/{id}', function (Request $request, Response $response, $id) {
+    $controller = new ControllerContactEvent();
+    $id = $id['id'];
+    $controller->update($id);
+    return $response;
 })
 ->add($auth);
 
 
 // ContactGroups
 
-$app->get('/agendaPhp/addContactGroup', function (Request $request, Response $response,) {
+$app->get('/agendaPhp/addContactGroup/{id}', function (Request $request, Response $response, $id) {
+    $controller = new ControllerContactGroup();
+    $id = $id['id'];
+    $controller->store($id);
+    return $response;
 })
 ->add($auth);
 
-$app->get('/agendaPhp/removeContactGroup', function (Request $request, Response $response,) {
+$app->any('/agendaPhp/addContactGroup', function (Request $request, Response $response) {
+    $groupId = $_POST['groupId'];
+    $contacts = $_POST['contacts'];
+
+    $controller = new ControllerContactGroup();
+    $controller->storeSave($groupId, $contacts);
+    return $response;
+})
+->add($auth);
+
+$app->get('/agendaPhp/removeContactGroup/{id}', function (Request $request, Response $response, $id) {
+    $controller = new ControllerContactGroup();
+    $id = $id['id'];
+    $controller->update($id);
+    return $response;
 })
 ->add($auth);
 

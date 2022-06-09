@@ -55,6 +55,13 @@
         </div>
       </nav>
       <div style="padding: 5em">
+      <?php if(!isset($_SESSION['id']) && !is_null($message)){
+               echo '<div class="message-container">';
+                echo    '<div class="message">';
+                       if(isset($message)) echo $message;
+                    echo'</div>';
+                    echo'</div>';
+            }?>
         <div class="container">
           <h1 class="container-title"><?=$title?></h1>
           <form action="/agendaPhp/editGroup" method="post" class="form-add">

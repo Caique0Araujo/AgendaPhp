@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contacts</title>
+    <title><?= $title ?></title>
     <link rel="shortcut icon" href="/img/favicon.svg" type="image/x-icon">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -38,91 +38,61 @@
                     <li class="config-bttn">
                         <?php if (isset($_SESSION['id'])) {
 
-
                             echo  '<a href="" class="dropdown-toggle" id="nav-bttn" data-toggle="dropdown">';
                             echo "<p>{$_SESSION['name']}</p>";
                             echo   "<span class='glyphicon glyphicon-user'></span>";
                             echo '</a>';
                         } ?>
-
-
-
                         <ul class="dropdown-menu" style="padding: 10px;">
-
                             <li><a href="/agendaPhp/editUser"><span class="glyphicon glyphicon-cog" style="margin-bottom: 10px;"></span>
                                     Configurações</a></li>
                             <li><a href="/agendaPhp/logout"><span class="glyphicon glyphicon-log-out"></span> Sair</a></li>
                         </ul>
-
                     </li>
                     <?php if (!isset($_SESSION['id'])) {
-
                         echo '<li><a href="/agendaPhp/login"></span> Login</a></li>';
                         echo '<li><a href="/agendaPhp/register"></span> Register</a></li>';
                     } ?>
-
                 </ul>
             </div>
         </nav>
-
         <div style="padding: 5em">
-        <?php if(!isset($_SESSION['id']) && !is_null($message)){
-               echo '<div class="message-container">';
+            <?php if (!isset($_SESSION['id']) && !is_null($message)) {
+                echo '<div class="message-container">';
                 echo    '<div class="message">';
-                       if(isset($message)) echo $message;
-                    echo'</div>';
-                    echo'</div>';
-            }?>
+                if (isset($message)) echo $message;
+                echo '</div>';
+                echo '</div>';
+            } ?>
+            <div class="container">
+                <h1 style="font-size: x-large; font-weight: 700;">Adicionar contatos ao evento: {{event.name}}</h1>
+                <div class="contacts">
+                    <form action="/events_contacts/addContact" method="post">
+                        <input type="hidden" name="event" id="event" value="{{event.id}}">
+                        <div class="checklist-container">
+                        <?php
+                            foreach($contacts as $contact){
 
-        <script> var message = 'Deseja confirmar a exclusão ?'; </script>
-
-            <div class="container-lists">
-
-                <div class="sub-container">
-                    <div class="bttn-links">
-                        <a class="bttn-add" href="/agendaPhp/addContact">Adicionar contatos</a>
-                    </div>
-                    <h1><?= $title?></h1>
-
-                    <div class="models-container">
-                        <?php 
-                        
-                        foreach ($contacts as $contact) {
-
-
-                            echo "<div class='models-sub-container'>
-                            <div class='container-data'>
-                                <p><span class='bold'>{$contact['name']}</span></p>
-                                <p class='data-p'><span style='font-weight: 600;'>Telefone:</span>{$contact['fone']}</p>
-                                <p class='data-p'><span style='font-weight: 600;'>Email:</span>{$contact['email']}</p>
-                            </div>
-                            <div class='container-options'>
-                                <a id='bttn-edit' href='/agendaPhp/editContact/{$contact['id']}'></a>
-                                <form action='/agendaPhp/deleteContact' method='post'>
-                                    <input type='hidden' name='id' value='{$contact['id']}'>
-                                    <input type='submit' id='bttn-delete' value='' onClick='return confirm(message)'>
-                                </form>
-                            </div>
-
-                            </div>";
-
-
-                            } 
-                            ?>
-                            
-                            </div>
+                            echo "<label class='container-checkbox'>{$contact['name']} - {$contact['fone']} - {$contact['email']}
+                                <input type='checkbox' name='contact' id='contact' value='{$contact['id']}'>
+                                <span class='checkmark'></span>
+                            </label>";
+                            }
+                        ?>
                         </div>
-
-                    </div>
+                        <input type="submit" value="Adicionar" id="bttn-contact">
+                    </form>
                 </div>
             </div>
         </div>
-    </div>
-    <footer>
-        <p><span>Agenda</span> &copy; 2022
-        <p style="margin-left: 2px;">By <a rel="author" target="_blank" href="https://www.linkedin.com/in/caique-araújo-0053201b0/" id="linkedin-link">Caique Araújo</a></p>
-        </p>
-    </footer>
+        <footer>
+            <p><span>Agenda</span> &copy; 2022
+            <p style="margin-left: 2px;">By <a rel="author" target="_blank" href="https://www.linkedin.com/in/caique-araújo-0053201b0/" id="linkedin-link">Caique Araújo</a></p>
+            </p>
+        </footer>
 </body>
-<style><?php include './views/templates/style.css'; ?></style>
+<style>
+    <?php include './views/templates/style.css'; ?>
+</style>
+
 </html>

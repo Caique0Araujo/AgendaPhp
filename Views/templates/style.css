@@ -328,13 +328,13 @@ input:-webkit-autofill:focus {
   }
   
 .message-container {
-    padding: 2em;
+    padding: 0.5em;
     display: flex;
     justify-content: center;
 }
 
 .message-container + .container-father{
-    margin-top: 10px;
+    margin-top: 0.5em;
     justify-content: flex-start;
 }
 
@@ -441,7 +441,7 @@ footer {
 
 
 .message-container + .container{
-    margin-bottom: 20px;
+    margin-bottom: 1em;
 }
 
 .models-sub-container{

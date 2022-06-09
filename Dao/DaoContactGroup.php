@@ -48,6 +48,22 @@ class DaoContactGroup
         return $list;
     }
 
+    public function getByContact($id, $User_id)
+    {
+        $sql = 
+        'SELECT groups_has_contacts.Groups_id, groups_has_contacts.Contacts_id
+        FROM groups_has_contacts 
+        WHERE Contacts_id = ? 
+        AND Users_id = ?;';
+        $pst = Connection::getPreparedStatement($sql);
+        $pst->bindValue(1, $id);
+        $pst->bindValue(2, $User_id);
+        $pst->execute();
+        $list = [];
+        $list = $pst->fetchAll(PDO::FETCH_ASSOC);
+        return $list;
+    }
+
     public function create(ContactGroup $contactGroup)
     {
 

@@ -64,28 +64,26 @@
                     echo'</div>';
                     echo'</div>';
             }?>
-      <div class="container">
-        <h1 class="container-title"><?= $title ?></h1>
-        <form action="/agendaPhp/editContact" method="post" class="form-add">
-          <input type="hidden" name="id" id="id" value="<?= $contact->getId() ?>" />
-          <div class="container-fields">
-            <label for="nome">Nome*: </label>
-            <input class="textfields" type="text" id="name" name="name" required value="<?= $contact->getName() ?>" />
-          </div>
-          <div class="container-fields">
-            <label for="fone">Telefone*: </label>
-            <input class="textfields" type="number" id="fone" name="fone" value="<?= $contact->getFone() ?>" />
-          </div>
-          <div class="container-fields">
-            <label for="email">E-mail: </label>
-            <input class="textfields" type="email" id="email" name="email" value="<?= $contact->getEmail() ?>" />
-          </div>
-          <div class="container-bttns">
-            <input class="bttn-submit" type="submit" value="Confirmar" />
-          </div>
+    <div class="container">
+    <h1 style="font-size: x-large; font-weight: 700;">Adicionar contatos ao grupo: <?= $group->getName() ?></h1>
+    <div class="contacts">
+        <form action="/agendaPhp/addContactGroup" method="post">
+            <input type="hidden" name="groupId" id="groupId" value="{<?= $group->getId() ?>}">
+            <div class="checklist-container">
+                <?php
+                foreach($contacts as $contact){
+
+                  echo "<label class='container-checkbox'>{$contact['name']} - {$contact['fone']} - {$contact['email']}
+                      <input type='checkbox' name='contacts[]' id='contacts' value='{$contact['id']}'>
+                      <span class='checkmark'></span>
+                  </label>";
+                }
+                ?>
+            </div>
+            <input type="submit" value="Adicionar" id="bttn-contact">
         </form>
-      </div>
     </div>
+</div>
   </div>
   <footer>
     <p><span>Agenda</span> &copy; 2022

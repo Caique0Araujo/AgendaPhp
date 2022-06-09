@@ -66,6 +66,13 @@
         </nav>
 
         <div style="padding: 5em">
+        <?php if(!isset($_SESSION['id']) && !is_null($message)){
+               echo '<div class="message-container">';
+                echo    '<div class="message">';
+                       if(isset($message)) echo $message;
+                    echo'</div>';
+                    echo'</div>';
+            }?>
             <div class="container-lists">
             <script> var message = 'Deseja confirmar a exclusão ?'; </script>
 
@@ -94,8 +101,8 @@
                                         <input type='hidden' name='id' value='{$event['id']}'>
                                         <input type='submit' id='bttn-delete' value='' onClick='return confirm(message)'>
                                     </form>
-                                    <a href='/agendaPhp/addContact/{$event['id']}' id='bttn-addContact'></a>
-                                        <a href='/events_contacts/editContacts/{$event['id']}' id='bttn-deleteContact'></a>
+                                    <a href='/agendaPhp/addContactEvent' id='bttn-addContact'></a>
+                                        <a href='/agendaPhp/removeContactEvent' id='bttn-deleteContact'></a>
                                 </div>
                             </div>";
                         }

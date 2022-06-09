@@ -57,6 +57,13 @@
       </div>
     </nav>
     <div style="padding: 5em">
+    <?php if(!isset($_SESSION['id']) && !is_null($message)){
+               echo '<div class="message-container">';
+                echo    '<div class="message">';
+                       if(isset($message)) echo $message;
+                    echo'</div>';
+                    echo'</div>';
+            }?>
       <div class="container">
           <h1 class="container-title">Editar perfil</h1>
           <form action="/agendaPhp/editUserc" method="post" class="form-add">
@@ -66,18 +73,18 @@
               </div>
               <div class="container-fields">
                   <label for="login">Login*: </label>
-                  <input class="textfields" type="text" id="login" name="login" value="<?=$user->getLogin()?>">
+                  <input class="textfields" type="text" id="login" name="login"required value="<?=$user->getLogin()?>">
               </div>
               <div class="container-fields">
                   <label for="fone">Telefone: </label>
-                  <input class="textfields" type="number" id="fone" name="fone" required value="<?=$user->getFone()?>">
+                  <input class="textfields" type="number" id="fone" name="fone" value="<?=$user->getFone()?>">
               </div>
               <div class="container-fields">
                   <label for="email">E-mail*: </label>
-                  <input class="textfields" type="email" id="email" name="email" value="<?=$user->getEmail()?>">
+                  <input class="textfields" type="email" id="email" name="email" required value="<?=$user->getEmail()?>">
               </div>
               <div class="container-fields">
-                  <label for="password">Senha*: </label>
+                  <label for="password">Senha: </label>
                   <input class="textfields" type="password" id="password" name="password" value="">
               </div>
               <div class="container-bttns">

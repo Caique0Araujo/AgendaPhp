@@ -66,7 +66,19 @@
             </div>
         </nav>
 
-        <div style="padding: 5em"><?= $content ?></div>
+        <div style="padding: 5em">
+            
+            <?php if(!isset($_SESSION['id']) && !is_null($message)){
+               echo '<div class="message-container">';
+                echo    '<div class="message">';
+                       if(isset($message)) echo $message;
+                    echo'</div>';
+                    echo'</div>';
+            }?>
+            <?= $content ?>
+
+
+        </div>
     </div>
     <footer>
         <p><span>Agenda</span> &copy; 2022

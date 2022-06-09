@@ -21,20 +21,24 @@ class ControllerUser
     public function indexOne()
     {
     }
-    public function renderLogin()
+    public function renderLogin($message)
     {
         $view = new UserView();
-        $view->login();
+        $view->login($message);
     }
 
     public function renderRegister()
     {
         $view = new UserView();
-        $view->addForm();
+        $view->addForm(null);
     }
 
     public function login($data)
     {
+        $view = new UserView();
+
+        $message = null;
+
         if(!empty($data['login'])){
             $login = $data['login'];
         }
@@ -43,13 +47,14 @@ class ControllerUser
         }
 
         if(!isset($login)){
-            echo 'Insira login ou email!';
-            return false;
+            $message = 'Insira login ou email!';
+            return $view->login($message);
         }
 
         if(empty($data['password'])){
-            echo 'Insira senha!';
-            return false;
+            $message = 'Insira senha!';
+            return $view->login($message);
+            
         }
 
         $password = $data['password'];
@@ -57,8 +62,8 @@ class ControllerUser
         $dao = new DaoUser();
 
         if(!$dao->authLogin($login, $password)){
-            echo 'Credenciais inválidas!';
-            return false;
+            $message = 'Credenciais inválidas!';
+            return $view->login($message);
         }
 
         if($dao->login($login)){
@@ -76,25 +81,30 @@ class ControllerUser
         $fone = $data['fone'];
         $password = $data['password'];
         $login = $data['login'];
+        $message = null;
 
         $verify = new Verify();
+        $view = new UserView();
 
         
 
         $confirmPassword = $data['confirmPassword'];
 
         if($confirmPassword != $password){
-            echo 'Senhas diferentes, tente novament!';
-            return;
+            $message = 'Senhas diferentes, tente novamente!';
+            return $view->addForm($message);
+
         }
 
         if($verify->emailActive($email)){
-            echo 'Email já cadastrado';
-            return;
+            $message = 'Email já cadastrado';
+            return $view->login($message);
+
         }
         if($verify->loginActive($login)){
-            echo 'Login já cadastrado';
-            return;
+            $message = 'Login já cadastrado';
+            return $view->login($message);
+            
         }
 
 
@@ -105,7 +115,6 @@ class ControllerUser
         $user->setLogin($login);
         $user->setPassword(password_hash($password, PASSWORD_BCRYPT));
         $dao = new DaoUser();
-        $view = new UserView();
 
 
 
@@ -113,13 +122,13 @@ class ControllerUser
             $id = $dao->getIdByLogin($login, $email);
             $user->setId($id);
             $dao->update($user);
-            return $view->login();
+            return $view->login(null);
             
         }
 
         $dao->create($user);
         
-        return $view->login();
+        return $view->login($message);
 
     }
 
@@ -130,6 +139,19 @@ class ControllerUser
         $user = $dao->getById($_SESSION['id']);
         $view->editForm($user);
     }
+
+    public function updateSave($id, $name, $login, $fone, $email){
+        $user = new User();
+
+        $user->setId($id);
+        $user->setName($name);
+        $user->setEmail($fone);
+        $user->setFone($fone);
+
+        $dao = new DaoUser();
+        $dao->update($user);
+    }
+
     public function delete($id)
     {
         $dao = new DaoUser();

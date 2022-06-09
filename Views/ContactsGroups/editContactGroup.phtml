@@ -64,27 +64,21 @@
                     echo'</div>';
                     echo'</div>';
             }?>
-      <div class="container">
-        <h1 class="container-title"><?= $title ?></h1>
-        <form action="/agendaPhp/editContact" method="post" class="form-add">
-          <input type="hidden" name="id" id="id" value="<?= $contact->getId() ?>" />
-          <div class="container-fields">
-            <label for="nome">Nome*: </label>
-            <input class="textfields" type="text" id="name" name="name" required value="<?= $contact->getName() ?>" />
-          </div>
-          <div class="container-fields">
-            <label for="fone">Telefone*: </label>
-            <input class="textfields" type="number" id="fone" name="fone" value="<?= $contact->getFone() ?>" />
-          </div>
-          <div class="container-fields">
-            <label for="email">E-mail: </label>
-            <input class="textfields" type="email" id="email" name="email" value="<?= $contact->getEmail() ?>" />
-          </div>
-          <div class="container-bttns">
-            <input class="bttn-submit" type="submit" value="Confirmar" />
-          </div>
-        </form>
-      </div>
+    <div class="container">
+    <h1 style="font-size: x-large;  font-weight: 700;">Remover contatos de: {{groups.name}}</h1>
+    <form action="/groups_contacts/removeContacts" method="post" class="form-add">
+        <input type="hidden" name="idGroup" value="{{groups.id}}">
+        <div class="checklist-container">
+            {{#each groups.Contacts}}
+            <label class="container-checkbox">{{this.name}} - {{this.email}}
+                <input type="checkbox" name="contacts" id="contacts" value="{{this.id}}">
+                <span class="checkmark"></span>
+            </label>
+            {{/each}}
+        </div>
+        <input type="submit" value="Remover" id="bttn-contact">
+    </form>
+</div>
     </div>
   </div>
   <footer>

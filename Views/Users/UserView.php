@@ -13,7 +13,7 @@ class UserView
         $content = '';
         require_once './Views/templates/main.phtml';
     }
-    public function addForm(){
+    public function addForm($message){
         $title = 'Registrar';
         $content = file_get_contents('./views/Users/register.html');
         require_once './Views/templates/main.phtml';
@@ -22,7 +22,7 @@ class UserView
         $title = 'Editar Usuário';
         require_once './views/Users/editUser.phtml';
     }
-    public function login(){
+    public function login($message){
         $title = 'Login';
         $content = file_get_contents('./views/Users/login.html');
         require_once './Views/templates/main.phtml';
