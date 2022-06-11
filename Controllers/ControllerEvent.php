@@ -2,6 +2,7 @@
 
 namespace Agenda\Controllers;
 
+use Agenda\Dao\DaoContact;
 use Agenda\Dao\DaoEvent;
 use Agenda\Models\Event;
 use Agenda\Views\Events\EventView;
@@ -14,9 +15,19 @@ class ControllerEvent
 
     public function indexAll()
     {
-        $events = [];
-        $dao = new DaoEvent();
-        $events = $dao->getAll($_SESSION['id']);
+        $events = array();
+
+
+        $daoEvent = new DaoEvent();
+        $daoContact = new DaoContact();
+
+        $events = $daoEvent->getAll($_SESSION['id']);
+
+        for($i = 0; $i < sizeof($events); $i++){
+            $contacts = $daoContact->getByEvent($events[$i]['id']);
+            $events[$i]['contacts'] = $contacts;
+        }
+
         $view = new EventView();
         $view->dataContainer($events);
     }

@@ -311,11 +311,31 @@ $app->get('/agendaPhp/addContactEvent/{id}', function (Request $request, Respons
 })
 ->add($auth);
 
+$app->any('/agendaPhp/addContactEvent', function (Request $request, Response $response) {
+    $eventId = $_POST['eventId'];
+    $contacts = $_POST['contacts']; 
+    $controller = new ControllerContactEvent();
+    $controller->storeSave($eventId, $contacts);
+    return $response->withHeader('Location', 'http://localhost/agendaPhp/events')->withStatus(302);
+
+})
+->add($auth);
+
 $app->get('/agendaPhp/removeContactEvent/{id}', function (Request $request, Response $response, $id) {
     $controller = new ControllerContactEvent();
     $id = $id['id'];
     $controller->update($id);
     return $response;
+})
+->add($auth);
+
+$app->any('/agendaPhp/removeContactEvent', function (Request $request, Response $response) {
+    $contacts = $_POST['contacts'];
+    $event = $_POST['idEvent'];
+    $controller = new ControllerContactEvent();
+    $controller->updateSave($event, $contacts);
+    return $response->withHeader('Location', 'http://localhost/agendaPhp/events')->withStatus(302);
+
 })
 ->add($auth);
 
@@ -332,11 +352,11 @@ $app->get('/agendaPhp/addContactGroup/{id}', function (Request $request, Respons
 
 $app->any('/agendaPhp/addContactGroup', function (Request $request, Response $response) {
     $groupId = $_POST['groupId'];
-    $contacts = $_POST['contacts'];
-
+    $contacts = $_POST['contacts']; 
     $controller = new ControllerContactGroup();
     $controller->storeSave($groupId, $contacts);
-    return $response;
+    return $response->withHeader('Location', 'http://localhost/agendaPhp/groups')->withStatus(302);
+
 })
 ->add($auth);
 
@@ -348,5 +368,14 @@ $app->get('/agendaPhp/removeContactGroup/{id}', function (Request $request, Resp
 })
 ->add($auth);
 
+$app->any('/agendaPhp/removeContactGroup', function (Request $request, Response $response) {
+    $contacts = $_POST['contacts'];
+    $group = $_POST['idGroup'];
+    $controller = new ControllerContactGroup();
+    $controller->updateSave($group, $contacts);
+    return $response->withHeader('Location', 'http://localhost/agendaPhp/groups')->withStatus(302);
+
+})
+->add($auth);
 
 $app->run();

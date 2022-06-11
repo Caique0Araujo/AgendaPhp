@@ -92,8 +92,14 @@
                                     <p><span class='bold'>{$event['name']}</a></span></p>
                                     <p class='data-p'><span style='font-weight: 600;'>Descrição:</span> {$event['description']}</p>
                                     <p class='data-p'><span style='font-weight: 600;'>Data:</span> {$event['date']}</p>
-                                    <p class='data-p'><span style='font-weight: 600;'>Contatos:</span>
-                                    </p>
+                                    <p class='data-p'><span style='font-weight: 600;'>Contatos:</span>";
+                                    foreach($event['contacts'] as $contact){
+                                        echo 
+                                        "<span style='margin-right: auto;'>
+                                            {$contact['name']} <span style='color: blue;'>|</span>
+                                        </span>";
+                                    }
+                                echo "</p>
                                 </div>
                                 <div class='container-options'>
                                     <a id='bttn-edit' href='/agendaPhp/editEvent/{$event['id']}'></a>
@@ -101,8 +107,8 @@
                                         <input type='hidden' name='id' value='{$event['id']}'>
                                         <input type='submit' id='bttn-delete' value='' onClick='return confirm(message)'>
                                     </form>
-                                    <a href='/agendaPhp/addContactEvent' id='bttn-addContact'></a>
-                                        <a href='/agendaPhp/removeContactEvent' id='bttn-deleteContact'></a>
+                                    <a href='/agendaPhp/addContactEvent/{$event['id']}' id='bttn-addContact'></a>
+                                        <a href='/agendaPhp/removeContactEvent/{$event['id']}' id='bttn-deleteContact'></a>
                                 </div>
                             </div>";
                         }

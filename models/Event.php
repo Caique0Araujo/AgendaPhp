@@ -63,9 +63,13 @@ class Event {
      */ 
     public function getDate()
     {
-        $this->date = date("Y-m-d\TH:i:s", strtotime($this->date));
         return $this->date;
 
+    }
+
+    public function getFormatedDate(){
+        $this->date = date("Y-m-d\TH:i:s", strtotime($this->date));
+        return $this->date;
     }
 
     /**

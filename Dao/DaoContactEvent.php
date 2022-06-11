@@ -58,8 +58,8 @@ class DaoContactEvent
 
         $pst = Connection::getPreparedStatement($sql);
 
-        $pst->bindValue(1, $contactEvent->getevent_id());
-        $pst->bindValue(2, $contactEvent->getContact_id());
+        $pst->bindValue(1, $contactEvent->getContact_id());
+        $pst->bindValue(2, $contactEvent->getevent_id());
         $pst->bindValue(3, $contactEvent->getUser_id());
 
 
@@ -146,6 +146,29 @@ class DaoContactEvent
                 return true;
             } else {
                 return false;
+            }
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
+    }
+
+    public function exists($Event_id, $Contact_id, $User_id){
+        try {
+            $sql =
+            'SELECT * 
+            FROM events_has_contacts
+            WHERE Users_id = ? AND Contacts_id = ? AND Events_id = ?';
+
+            $pst = Connection::getPreparedStatement($sql);
+            $pst->bindValue(1, $User_id);
+            $pst->bindValue(2, $Contact_id);
+            $pst->bindValue(3, $Event_id);
+            $pst->execute();
+
+            if ($pst->rowCount() < 1) {
+                return false;
+            } else {
+                return true;
             }
         } catch (PDOException $e) {
             echo $e->getMessage();

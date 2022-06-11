@@ -83,16 +83,20 @@
                     <?php
 
                         foreach ($groups as $group) {
+
                             echo "
                             <div class='models-sub-container'>
                                 <div class='container-data'>
                                     <p><span class='bold'>{$group['name']}</a></span></p>
                                     <p class='data-p'><span style='font-weight: 600;'>Descrição:</span> {$group['description']}</p>
-                                    <p class='data-p'><span style='font-weight: 600;'>Contatos:</span>
-                                        <span style='margin-right: auto;'>
-                                            <span style='color: blue;'>|</span>
-                                        </span>
-                                    </p>
+                                    <p class='data-p'><span style='font-weight: 600;'>Contatos:</span>";
+                                        foreach($group['contacts'] as $contact){
+                                            echo 
+                                            "<span style='margin-right: auto;'>
+                                                {$contact['name']} <span style='color: blue;'>|</span>
+                                            </span>";
+                                        }
+                                    echo "</p>
                                 </div>
                                 <div class='container-options'>
                                     <a id='bttn-edit' href='/agendaPhp/editGroup/{$group['id']}'></a>

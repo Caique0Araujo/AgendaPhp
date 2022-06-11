@@ -65,16 +65,16 @@
                 echo '</div>';
             } ?>
             <div class="container">
-                <h1 style="font-size: x-large; font-weight: 700;">Adicionar contatos ao evento: {{event.name}}</h1>
+                <h1 style="font-size: x-large; font-weight: 700;">Adicionar contatos ao evento: <?= $event->getName()?></h1>
                 <div class="contacts">
-                    <form action="/events_contacts/addContact" method="post">
-                        <input type="hidden" name="event" id="event" value="{{event.id}}">
+                    <form action="/agendaPhp/addContactEvent" method="post">
+                        <input type="hidden" name="eventId" id="eventId" value="{<?= $event->getId()?>}">
                         <div class="checklist-container">
                         <?php
                             foreach($contacts as $contact){
 
                             echo "<label class='container-checkbox'>{$contact['name']} - {$contact['fone']} - {$contact['email']}
-                                <input type='checkbox' name='contact' id='contact' value='{$contact['id']}'>
+                                <input type='checkbox' name='contacts[]' id='contacts' value='{$contact['id']}'>
                                 <span class='checkmark'></span>
                             </label>";
                             }

@@ -69,7 +69,7 @@ class DaoContactGroup
 
         $sql = 
         'INSERT 
-        INTO groups_has_contacts(Contacts_id, Groups_id, Users_id) 
+        INTO groups_has_contacts (Groups_id, Contacts_id, Users_id) 
         VALUES (?, ?, ?)';
 
         $pst = Connection::getPreparedStatement($sql);
@@ -146,25 +146,27 @@ class DaoContactGroup
         }
     }
 
-    public function isEmpty($User_id)
-    {
+    public function exists($Group_id, $Contact_id, $User_id){
         try {
             $sql =
-                'SELECT * 
-        FROM groups_has_contacts
-        WHERE Users_id = ?';
+            'SELECT * 
+            FROM groups_has_contacts
+            WHERE Users_id = ? AND Contacts_id = ? AND Groups_id = ?';
 
             $pst = Connection::getPreparedStatement($sql);
             $pst->bindValue(1, $User_id);
+            $pst->bindValue(2, $Contact_id);
+            $pst->bindValue(3, $Group_id);
             $pst->execute();
 
             if ($pst->rowCount() < 1) {
-                return true;
-            } else {
                 return false;
+            } else {
+                return true;
             }
         } catch (PDOException $e) {
             echo $e->getMessage();
         }
     }
+    
 }

@@ -65,16 +65,20 @@
                     echo'</div>';
             }?>
     <div class="container">
-    <h1 style="font-size: x-large;  font-weight: 700;">Remover contatos de: {{groups.name}}</h1>
-    <form action="/groups_contacts/removeContacts" method="post" class="form-add">
-        <input type="hidden" name="idGroup" value="{{groups.id}}">
+    <h1 style="font-size: x-large;  font-weight: 700;">Remover contatos de: <?= $group->getName()?></h1>
+    <form action="/agendaPhp/removeContactGroup" method="post" class="form-add">
+        <input type="hidden" name="idGroup" value="<?= $group->getId()?>">
         <div class="checklist-container">
-            {{#each groups.Contacts}}
-            <label class="container-checkbox">{{this.name}} - {{this.email}}
-                <input type="checkbox" name="contacts" id="contacts" value="{{this.id}}">
-                <span class="checkmark"></span>
-            </label>
-            {{/each}}
+            <?php
+            foreach($contacts as $contact)
+            {
+              echo "
+              <label class='container-checkbox'>{$contact['name']} - {$contact['email']}
+                  <input type='checkbox' name='contacts[]' id='contacts'value='{$contact['id']}'>
+                  <span class='checkmark'></span>
+              </label>";
+            }
+            ?>
         </div>
         <input type="submit" value="Remover" id="bttn-contact">
     </form>

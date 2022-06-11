@@ -38,11 +38,11 @@ class DaoContact
 
         try {
             $sql =
-                'SELECT contacts.id, contacts.name, contacts.email, contacts.fone 
-        FROM contacts AS c 
-        INNER JOIN groups_has_contacts AS gc ON c.id = gc.Contacts_id 
-        WHERE gc.Groups_id = ? 
-        AND c.active = 1;';
+            'SELECT c.id, c.name, c.email, c.fone 
+            FROM contacts AS c 
+            INNER JOIN groups_has_contacts AS gc ON c.id = gc.Contacts_id 
+            WHERE gc.Groups_id = ? 
+            AND c.active = 1;';
 
             $pst = Connection::getPreparedStatement($sql);
             $pst->bindValue(1, $Group_id);

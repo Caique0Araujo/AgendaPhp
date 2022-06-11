@@ -2,6 +2,8 @@
 
 namespace Agenda\Controllers;
 
+use Agenda\Dao\DaoContact;
+use Agenda\Dao\DaoContactGroup;
 use Agenda\Dao\DaoGroup;
 use Agenda\Models\Group;
 use Agenda\Views\Groups\GroupView;
@@ -13,9 +15,20 @@ class ControllerGroup
     }
     public function indexAll()
     {
-        $groups = [];
-        $dao = new DaoGroup();
-        $groups = $dao->getAll($_SESSION['id']);
+        $groups = array();
+
+        $daoGroup = new DaoGroup();
+        $daoContact = new DaoContact();
+
+        $groups = $daoGroup->getAll($_SESSION['id']);
+
+        for($i = 0; $i < sizeof($groups); $i++){
+            $contacts = $daoContact->getByGroup($groups[$i]['id']);
+            $groups[$i]['contacts'] = $contacts;
+        }
+
+
+       
         $view = new GroupView();
         $view->dataContainer($groups);
     }

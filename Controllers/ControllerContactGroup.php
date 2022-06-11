@@ -7,6 +7,7 @@ use Agenda\Dao\DaoContactGroup;
 use Agenda\Dao\DaoGroup;
 use Agenda\Models\ContactGroup;
 use Agenda\Views\ContactsGroups\ContactsGroupView;
+use Agenda\Views\Groups\GroupView;
 
 class ControllerContactGroup{
     public function store($id)
@@ -23,27 +24,40 @@ class ControllerContactGroup{
     public function storeSave($groupId, $contacts){
 
         $dao = new DaoContactGroup();
-        $gId = $dao->getByGroup($groupId, $_SESSION['id']);
+
         
-        for($i = 0; $i < count($contacts); $i++){
-            $cId = $dao->getByContact($contacts[$i], $_SESSION['id']);
-            if(isset($gId[$i]) && isset($cId)){
-                $message = 'Contato já cadastrado no grupo.';
+        for($i = 0; $i < sizeof($contacts); $i++){
+            
+            if(!$dao->exists($groupId[1], $contacts[$i], $_SESSION['id'])){
+                $gc = new ContactGroup();
+                $gc->setGroup_id($groupId[1]);
+                $gc->setContact_id($contacts[$i]);
+                $gc->setUser_id($_SESSION['id']);
+    
+                $dao->create($gc);
             }
-            $gc = new ContactGroup();
-            $gc->setGroup_id($gId);
-            $gc->setContact_id($cId);
-            $gc->setUser_id($_SESSION['id']);
-            $dao->create($gc);
+           
         }
     }
 
     public function update($id)
     {
-        $groupDao = new DaoGroup();
-        $group = $groupDao->getById($id, $_SESSION['id']);
-        $dao = new DaoContactGroup();
+        $daoContact = new DaoContact();
+        $contacts = $daoContact->getByGroup($id, $_SESSION['id']);
+        $daoGroup = new DaoGroup();
+        $group = $daoGroup->getById($id, $_SESSION['id']);
         $view = new ContactsGroupView();
-        $view->editForm();
+        $view->editForm($contacts, $group);
+    }
+
+    public function updateSave($group, $contacts){
+
+        $daoGroup = new DaoGroup();
+        $daoGC = new DaoContactGroup();
+
+        for($i = 0; $i < sizeof($contacts); $i++){
+           $daoGC->delete($group, $contacts[$i], $_SESSION['id']);
+        }
+
     }
 }
