@@ -50,16 +50,19 @@ class DaoContactEvent
 
     public function create(ContactEvent $contactEvent)
     {
+        print_r($contactEvent->getEvent_id());
+        print_r($contactEvent->getContact_id());
+        print_r($contactEvent->getUser_id());
 
         $sql = 
         'INSERT 
-        INTO events_has_contacts(Contacts_id, Events_id, Users_id) 
+        INTO events_has_contacts (Events_id, Contacts_id, Users_id) 
         VALUES (?, ?, ?)';
 
         $pst = Connection::getPreparedStatement($sql);
 
-        $pst->bindValue(1, $contactEvent->getContact_id());
-        $pst->bindValue(2, $contactEvent->getevent_id());
+        $pst->bindValue(1, $contactEvent->getEvent_id());
+        $pst->bindValue(2, $contactEvent->getContact_id());
         $pst->bindValue(3, $contactEvent->getUser_id());
 
 

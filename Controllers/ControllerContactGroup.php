@@ -28,9 +28,9 @@ class ControllerContactGroup{
         
         for($i = 0; $i < sizeof($contacts); $i++){
             
-            if(!$dao->exists($groupId[1], $contacts[$i], $_SESSION['id'])){
+            if(!$dao->exists($groupId, $contacts[$i], $_SESSION['id'])){
                 $gc = new ContactGroup();
-                $gc->setGroup_id($groupId[1]);
+                $gc->setGroup_id($groupId);
                 $gc->setContact_id($contacts[$i]);
                 $gc->setUser_id($_SESSION['id']);
     

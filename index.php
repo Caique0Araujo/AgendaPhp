@@ -33,7 +33,7 @@ $auth = function ($request, $handler) {
 
 // MAIN ROUTES
 
-$app->get('/agendaPhp/home', function (Request $request, Response $response) {
+$app->get('/agendaPhp/', function (Request $request, Response $response) {
     $controller = new ControllerContact();
     $controller->indexHome();
     return $response;

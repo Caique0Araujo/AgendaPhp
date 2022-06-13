@@ -68,7 +68,7 @@
     <h1 style="font-size: x-large; font-weight: 700;">Adicionar contatos ao grupo: <?= $group->getName() ?></h1>
     <div class="contacts">
         <form action="/agendaPhp/addContactGroup" method="post">
-            <input type="hidden" name="groupId" id="groupId" value="{<?= $group->getId() ?>}">
+            <input type="hidden" name="groupId" id="groupId" value="<?= $group->getId() ?>">
             <div class="checklist-container">
                 <?php
                 foreach($contacts as $contact){

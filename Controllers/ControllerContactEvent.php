@@ -5,7 +5,6 @@ namespace Agenda\Controllers;
 use Agenda\Dao\DaoContact;
 use Agenda\Dao\DaoEvent;
 use Agenda\Dao\DaoContactEvent;
-use Agenda\Dao\DaoGroup;
 use Agenda\Models\ContactEvent;
 use Agenda\Views\ContactsEvents\ContactsEventView;
 
@@ -23,14 +22,21 @@ class ControllerContactEvent{
 
     public function storeSave($eventId, $contacts){
         $dao = new DaoContactEvent();
+        $daoEvent = new DaoEvent();
+
+        $event = $daoEvent->getById($eventId);
 
         for($i = 0; $i < sizeof($contacts); $i++){
-            if(!$dao->exists($eventId[1], $contacts[$i], $_SESSION['id'])){
-                print_r($eventId[1]);
+
+            print_r($event->getId());
+            
+
+            if(!$dao->exists($event->getId(), $contacts[$i], $_SESSION['id'])){
                 $ec = new ContactEvent();
-                $ec->setEvent_id($eventId[1]);
+                $ec->setEvent_id($event->getId());
                 $ec->setContact_id($contacts[$i]);
                 $ec->setUser_id($_SESSION['id']);
+
 
                 $dao->create($ec);
             }

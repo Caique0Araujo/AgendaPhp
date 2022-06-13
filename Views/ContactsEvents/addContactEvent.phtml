@@ -68,7 +68,7 @@
                 <h1 style="font-size: x-large; font-weight: 700;">Adicionar contatos ao evento: <?= $event->getName()?></h1>
                 <div class="contacts">
                     <form action="/agendaPhp/addContactEvent" method="post">
-                        <input type="hidden" name="eventId" id="eventId" value="{<?= $event->getId()?>}">
+                        <input type="hidden" name="eventId" id="eventId" value="<?= $event->getId()?>">
                         <div class="checklist-container">
                         <?php
                             foreach($contacts as $contact){
