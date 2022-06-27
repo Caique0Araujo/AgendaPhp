@@ -11,13 +11,13 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,N
 -- -----------------------------------------------------
 -- Schema agendatwii
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `id19088349_agenda` DEFAULT CHARACTER SET utf8 ;
-USE `id19088349_agenda` ;
+CREATE SCHEMA IF NOT EXISTS `agendatwii` DEFAULT CHARACTER SET utf8 ;
+USE `agendatwii` ;
 
 -- -----------------------------------------------------
 -- Table `agendatwii`.`Users`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `id19088349_agenda`.`Users` (
+CREATE TABLE IF NOT EXISTS `agendatwii`.`Users` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(50) NOT NULL,
   `login` VARCHAR(30) NOT NULL,
@@ -34,7 +34,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `agendatwii`.`Contacts`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `id19088349_agenda`.`Contacts` (
+CREATE TABLE IF NOT EXISTS `agendatwii`.`Contacts` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(50) NOT NULL,
   `email` VARCHAR(50) NULL,
@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS `id19088349_agenda`.`Contacts` (
   INDEX `fk_Contacts_Users1_idx` (`Users_id` ASC),
   CONSTRAINT `fk_Contacts_Users1`
     FOREIGN KEY (`Users_id`)
-    REFERENCES `id19088349_agenda`.`Users` (`id`)
+    REFERENCES `agendatwii`.`Users` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -54,7 +54,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `agendatwii`.`Groups`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `id19088349_agenda`.`Groups` (
+CREATE TABLE IF NOT EXISTS `agendatwii`.`Groups` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(40) NOT NULL,
   `description` VARCHAR(250) NULL,
@@ -64,7 +64,7 @@ CREATE TABLE IF NOT EXISTS `id19088349_agenda`.`Groups` (
   INDEX `fk_Groups_Users1_idx` (`Users_id` ASC),
   CONSTRAINT `fk_Groups_Users1`
     FOREIGN KEY (`Users_id`)
-    REFERENCES `id19088349_agenda`.`Users` (`id`)
+    REFERENCES `agendatwii`.`Users` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -73,7 +73,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `agendatwii`.`Events`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `id19088349_agenda`.`Events` (
+CREATE TABLE IF NOT EXISTS `agendatwii`.`Events` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(40) NOT NULL,
   `description` VARCHAR(250) NULL,
@@ -84,7 +84,7 @@ CREATE TABLE IF NOT EXISTS `id19088349_agenda`.`Events` (
   INDEX `fk_Events_Users_idx` (`Users_id` ASC),
   CONSTRAINT `fk_Events_Users`
     FOREIGN KEY (`Users_id`)
-    REFERENCES `id19088349_agenda`.`Users` (`id`)
+    REFERENCES `agendatwii`.`Users` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -93,7 +93,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `agendatwii`.`Events_has_Contacts`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `id19088349_agenda`.`Events_has_Contacts` (
+CREATE TABLE IF NOT EXISTS `agendatwii`.`Events_has_Contacts` (
   `Events_id` INT NOT NULL,
   `Contacts_id` INT NOT NULL,
   `Users_id` INT NOT NULL,
@@ -103,17 +103,17 @@ CREATE TABLE IF NOT EXISTS `id19088349_agenda`.`Events_has_Contacts` (
   INDEX `fk_Events_has_Contacts_Users1_idx` (`Users_id` ASC),
   CONSTRAINT `fk_Events_has_Contacts_Events1`
     FOREIGN KEY (`Events_id`)
-    REFERENCES `id19088349_agenda`.`Events` (`id`)
+    REFERENCES `agendatwii`.`Events` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Events_has_Contacts_Contacts1`
     FOREIGN KEY (`Contacts_id`)
-    REFERENCES `id19088349_agenda`.`Contacts` (`id`)
+    REFERENCES `agendatwii`.`Contacts` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Events_has_Contacts_Users1`
     FOREIGN KEY (`Users_id`)
-    REFERENCES `id19088349_agenda`.`Users` (`id`)
+    REFERENCES `agendatwii`.`Users` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -122,7 +122,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `agendatwii`.`Groups_has_Contacts`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `id19088349_agenda`.`Groups_has_Contacts` (
+CREATE TABLE IF NOT EXISTS `agendatwii`.`Groups_has_Contacts` (
   `Groups_id` INT NOT NULL,
   `Contacts_id` INT NOT NULL,
   `Users_id` INT NOT NULL,
@@ -132,17 +132,17 @@ CREATE TABLE IF NOT EXISTS `id19088349_agenda`.`Groups_has_Contacts` (
   INDEX `fk_Groups_has_Contacts_Users1_idx` (`Users_id` ASC),
   CONSTRAINT `fk_Groups_has_Contacts_Groups1`
     FOREIGN KEY (`Groups_id`)
-    REFERENCES `id19088349_agenda`.`Groups` (`id`)
+    REFERENCES `agendatwii`.`Groups` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Groups_has_Contacts_Contacts1`
     FOREIGN KEY (`Contacts_id`)
-    REFERENCES `id19088349_agenda`.`Contacts` (`id`)
+    REFERENCES `agendatwii`.`Contacts` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Groups_has_Contacts_Users1`
     FOREIGN KEY (`Users_id`)
-    REFERENCES `id19088349_agenda`.`Users` (`id`)
+    REFERENCES `agendatwii`.`Users` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
