@@ -2,13 +2,13 @@
 
 namespace Agenda\Dao;
 
-use PDO;
+use PDO; 
 use PDOException;
 use PDOStatement;
 
 class Connection{
 
-    private static $dsn = 'mysql:host=localhost;dbname=agendatwii;port=3306';
+    private static $dsn = 'mysql:host=localhost;dbname=AgendaTpDwII;port=3306';
     private static $user = 'root';
     private static $password = '';
     private static $Connection = null;
