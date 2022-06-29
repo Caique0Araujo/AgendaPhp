@@ -393,7 +393,11 @@ p{
 }
 
 footer {
-    height: 80px;
+    position: fixed;
+    left: 0px;
+    bottom: 0px;
+    width: 100%;
+    height: em;
     display: flex;
     align-items: center;
     justify-content: center;
